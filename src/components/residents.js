@@ -1,0 +1,63 @@
+import React, {Component, Fragment} from  'react'
+import {connect} from 'react-redux'
+import ReactModal from 'react-modal';
+
+class Residents extends Component {
+  state={
+    residentClicked: ''
+  }
+
+
+  renderResidentInfo = () => {
+    console.log("resident info");
+    let myResident = this.props.residents.find(resident => resident.id == this.state.residentClicked)
+    console.log(myResident);
+    return (
+      <div>
+      <h1>{myResident.name}</h1>
+      <p>Allergies: {myResident.allergies}</p>
+      <p>Meds: {myResident.medications}</p>
+      <button onClick={this.resetResident}>Back</button>
+      </div>
+    )
+  }
+
+  renderResidents = () => {
+      return this.props.residents.map(resident => {
+      return (<div>
+        <p onClick={() => this.setResident(resident.id)}>
+        {resident.name}
+        </p>
+        </div>
+      )
+    })
+  }
+
+  setResident = (resident) => {
+    this.setState({residentClicked: resident})
+  }
+
+  resetResident = () => {
+    this.setState({residentClicked: ''})
+  }
+
+  render(){
+    return (
+      <Fragment>
+        {this.state.residentClicked ==''? this.renderResidents(): this.renderResidentInfo()}
+
+      </Fragment>
+    )
+  }
+
+}
+
+function mapStateToProps(state){
+  return {residents: state.residents};
+}
+
+function mapDispatchToProps(){
+
+}
+
+export default connect(mapStateToProps)(Residents)
