@@ -5,11 +5,36 @@ import { Link, Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Login from './components/login'
 import Dashboard from './components/dashboard'
-import Rooms from './components/rooms'
+import Residents from './components/residents'
 import Nurses from './components/nurses'
 import Alerts from './components/alerts'
+import NurseDash from './components/nurse-dashboard'
 
 class App extends Component {
+
+  state = {
+    nurses: null
+  }
+
+
+  componentDidMount(){
+    fetch('http://localhost:3000/api/v1/nurses')
+    .then(r => r.json())
+    .then(r => this.setState({nurses: r}))
+
+    fetch('http://localhost:3000/api/v1/residents')
+    .then(r => r.json())
+    .then(r => this.props.dispatch({type: 'ADD_RESIDENTS', payload: r}))
+
+    fetch('http://localhost:3000/api/v1/alerts')
+    .then(r => r.json())
+    .then(r => this.props.dispatch({type: 'ADD_ALERTS', payload: r}))
+
+    fetch('http://localhost:3000/api/v1/appointments')
+    .then(r => r.json())
+    .then(r => this.props.dispatch({type: 'ADD_APPOINTMENTS', payload: r}))
+  }
+
   render() {
     return (
       <div className="App">
@@ -39,7 +64,7 @@ class App extends Component {
 
       <Route path="/admin/residents" exact render={(props) => {
         return (
-          <Rooms />
+          <Residents />
         )
       }}/>
 
@@ -51,9 +76,12 @@ class App extends Component {
 
 
       <Route path="/nurse/:id" exact render={(props) => {
-        return (
-          <p>nurse page</p>
-        )
+        let currentNurse = parseInt(props.match.params.id)
+          if (this.state.nurses){
+            return (
+              <NurseDash currentNurse={currentNurse} allNurses={this.state.nurses}/>
+            )
+          }
       }}/>
 
     </div>
@@ -63,11 +91,5 @@ class App extends Component {
 
 
 
-function mapStateToProps(state){
-  return {
 
-  }
-}
-
-
-export default connect(mapStateToProps)(App);
+export default connect()(App);
