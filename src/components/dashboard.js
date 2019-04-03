@@ -22,16 +22,9 @@ const Dashboard = () => {
      </Link>
 
 
-     <Link to="/admin/residents">
+     <Link to="/admin/alerts">
      <button>
       Alerts
-     </button>
-     </Link>
-
-
-     <Link to="/admin/residents">
-     <button>
-      Rooms/Residents
      </button>
      </Link>
 
