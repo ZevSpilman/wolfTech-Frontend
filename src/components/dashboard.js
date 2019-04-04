@@ -27,7 +27,6 @@ const Dashboard = () => {
       Alerts
      </button>
      </Link>
-
     </div>
   )
 }

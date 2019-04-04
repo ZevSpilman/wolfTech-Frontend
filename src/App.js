@@ -13,7 +13,8 @@ import NurseDash from './components/nurse-dashboard'
 class App extends Component {
 
   state = {
-    nurses: null
+    nurses: null,
+    alerts: null
   }
 
 
@@ -28,7 +29,7 @@ class App extends Component {
 
     fetch('http://localhost:3000/api/v1/alerts')
     .then(r => r.json())
-    .then(r => this.props.dispatch({type: 'ADD_ALERTS', payload: r}))
+    .then(r => this.setState({alerts: r}))
 
     fetch('http://localhost:3000/api/v1/appointments')
     .then(r => r.json())
@@ -69,9 +70,21 @@ class App extends Component {
       }}/>
 
       <Route path="/admin/nurses" exact render={(props) => {
+        if (this.state.nurses){
+          console.log(this.state.nurses);
         return (
-          <Nurses />
+          <Nurses allNurses={this.state.nurses}/>
         )
+      }
+      }}/>
+
+      <Route path="/admin/alerts" exact render={(props) => {
+        if (this.state.alerts){
+          console.log(this.state.nurses);
+        return (
+          <Alerts allAlerts={this.state.alerts}/>
+        )
+      }
       }}/>
 
 
