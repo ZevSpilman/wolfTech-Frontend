@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from  'react'
 import {connect} from 'react-redux'
 import ReactModal from 'react-modal';
+import { Link, Route } from 'react-router-dom'
 
 class Residents extends Component {
   state={
@@ -44,8 +45,12 @@ class Residents extends Component {
   render(){
     return (
       <Fragment>
+      <Link to="/admin/dashboard">
+        <button>
+         Home
+        </button>
+      </Link>
         {this.state.residentClicked ==''? this.renderResidents(): this.renderResidentInfo()}
-
       </Fragment>
     )
   }

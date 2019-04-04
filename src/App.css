@@ -31,3 +31,17 @@
     transform: rotate(360deg);
   }
 }
+
+.shift {
+  border: 3px solid black;
+}
+
+.resolved-alert{
+  animation: App-logo-spin infinite 10s linear;
+border: 3px solid black;
+}
+
+.unresolved-alert{
+  animation: App-logo-spin infinite 10s linear;
+  border: 3px solid red;
+}
