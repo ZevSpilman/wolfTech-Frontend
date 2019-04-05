@@ -18,6 +18,7 @@ class Residents extends Component {
       <h1>{myResident.name}</h1>
       <p>Allergies: {myResident.allergies}</p>
       <p>Meds: {myResident.medications}</p>
+      <p>Unit: {this.props.units.find(unit => unit.id == myResident.unit_id).name}</p>
       <button onClick={this.resetResident}>Back</button>
       </div>
     )

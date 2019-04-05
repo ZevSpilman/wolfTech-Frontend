@@ -14,7 +14,9 @@ class App extends Component {
 
   state = {
     nurses: null,
-    alerts: null
+    alerts: null,
+    units: null,
+    shifts: null
   }
 
 
@@ -34,7 +36,16 @@ class App extends Component {
     fetch('http://localhost:3000/api/v1/appointments')
     .then(r => r.json())
     .then(r => this.props.dispatch({type: 'ADD_APPOINTMENTS', payload: r}))
+
+    fetch('http://localhost:3000/api/v1/units')
+    .then(r => r.json())
+    .then(r => this.setState({units: r}))
+
+    fetch('http://localhost:3000/api/v1/shifts')
+    .then(r => r.json())
+    .then(r => this.setState({shifts: r}))
   }
+
 
   render() {
     return (
@@ -64,9 +75,11 @@ class App extends Component {
       }}/>
 
       <Route path="/admin/residents" exact render={(props) => {
-        return (
-          <Residents />
-        )
+        if (this.state.units){
+          return (
+            <Residents units={this.state.units} shifts={this.state.shifts}/>
+          )
+        }
       }}/>
 
       <Route path="/admin/nurses" exact render={(props) => {
