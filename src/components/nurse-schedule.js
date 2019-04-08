@@ -1,7 +1,7 @@
 import React from 'react';
-import { ReactAgenda , ReactAgendaCtrl , guid ,  Modal } from 'react-agenda';
+import { ReactAgenda , ReactAgendaCtrl , guid } from 'react-agenda';
 
-require('moment/locale/fr.js'); // this is important for traduction purpose
+require('moment/locale/fr.js');
 
 var colors= {
   'color-1':"rgba(102, 195, 131 , 1)" ,
@@ -47,7 +47,7 @@ export default class Agenda extends React.Component {
         items.push(
           {
             _id            :guid(),
-             name          : resident.name + ":" + " " + appoinment.variation, 
+             name          : resident.name + ":" + " " + appoinment.variation,
              startDateTime : parseISOString(appoinment.time),
              endDateTime   : add_minutes(parseISOString(appoinment.time), appoinment.duration),
              classes       : 'color-2 color-3'
@@ -60,7 +60,7 @@ export default class Agenda extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="schedule">
         <ReactAgenda
           minDate={now}
           maxDate={new Date(now.getFullYear(), now.getMonth()+3)}

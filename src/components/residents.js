@@ -2,23 +2,22 @@ import React, {Component, Fragment} from  'react'
 import {connect} from 'react-redux'
 import ReactModal from 'react-modal';
 import { Link, Route } from 'react-router-dom'
+import {Card, Button, CardDeck} from 'react-bootstrap'
 
 class Residents extends Component {
-  state={
+  state = {
     residentClicked: ''
   }
 
-
   renderResidentInfo = () => {
-    console.log("resident info");
+    console.log(" in renderResidentInfo",this.state.residentClicked);
     let myResident = this.props.residents.find(resident => resident.id == this.state.residentClicked)
-    console.log(myResident);
     return (
       <div>
       <h1>{myResident.name}</h1>
       <p>Allergies: {myResident.allergies}</p>
       <p>Meds: {myResident.medications}</p>
-      <p>Unit: {this.props.units.find(unit => unit.id == myResident.unit_id).name}</p>
+      <p>Unit: {this.props.units.find(unit => unit.id == myResident.unit.id).name}</p>
       <button onClick={this.resetResident}>Back</button>
       </div>
     )
@@ -27,9 +26,17 @@ class Residents extends Component {
   renderResidents = () => {
       return this.props.residents.map(resident => {
       return (<div>
-        <p onClick={() => this.setResident(resident.id)}>
-        {resident.name}
-        </p>
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src="" />
+          <Card.Body>
+            <Card.Title>{resident.name}</Card.Title>
+            <Card.Text>
+              Age: {resident.age}<br/>
+              Unit: {resident.unit.name}
+            </Card.Text>
+            <Button variant="primary" onClick={() => this.setResident(resident.id)}>Go somewhere</Button>
+          </Card.Body>
+        </Card>
         </div>
       )
     })
@@ -40,10 +47,12 @@ class Residents extends Component {
   }
 
   resetResident = () => {
+    console.log("resetting...");
     this.setState({residentClicked: ''})
   }
 
   render(){
+    console.log(this.state.residentClicked);
     return (
       <Fragment>
       <Link to="/admin/dashboard">
@@ -51,11 +60,10 @@ class Residents extends Component {
          Home
         </button>
       </Link>
-        {this.state.residentClicked ==''? this.renderResidents(): this.renderResidentInfo()}
+        {this.state.residentClicked === '' ? <CardDeck>{this.renderResidents()}</CardDeck> : this.renderResidentInfo()}
       </Fragment>
     )
   }
-
 }
 
 function mapStateToProps(state){

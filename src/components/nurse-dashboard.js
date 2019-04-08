@@ -4,7 +4,7 @@ import {InputGroup} from 'react-bootstrap';
 import {DropdownButton} from 'react-bootstrap';
 import {Dropdown} from 'react-bootstrap';
 import {FormControl} from 'react-bootstrap';
-import {Card} from 'react-bootstrap';
+import {Card, CardDeck} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import Agenda from './nurse-schedule'
 import DateTimePicker from 'react-datetime-picker';
@@ -32,7 +32,7 @@ class NurseDash extends Component {
      1000
    );
     if (this.props.allNurses){
-      let theNurse = this.props.allNurses.find(n => n.id == this.props.currentNurse)
+      let theNurse = this.props.allNurses.find(n => n.name == this.props.currentNurse.name)
       this.setState({currentNurse: theNurse})
     }
   }
@@ -101,7 +101,11 @@ class NurseDash extends Component {
         duration: this.state.appointmentDuration
       })
     })
-    .then(this.renderDoneMessage)
+    .then(r => r.json())
+    .then(r => {
+      debugger
+      this.openAppointmentForm()
+    })
   }
 
   renderAlertForm = () => {
@@ -154,7 +158,8 @@ class NurseDash extends Component {
   }
 
   startShift = () => {
-    if (this.state.selected_unit_id){  fetch(`http://localhost:3000/api/v1/shifts`, {
+    if (this.state.selected_unit_id){
+        fetch(`http://localhost:3000/api/v1/shifts`, {
         method: 'POST',
         headers: {
           "Content-Type" : 'application/json',
@@ -167,7 +172,15 @@ class NurseDash extends Component {
         })
       })
       .then(r => r.json())
-      .then(this.setState({shiftFrom: false}))}
+      .then( r => {
+          this.setState({shiftFrom: false})
+          let updatedArray = this.state.currentNurse.shifts
+          updatedArray.push(r)
+          this.setState({currentNurse: {...this.state.currentNurse, shifts: updatedArray}})
+          this.showOpenShifts()
+        }
+      )
+    }
       else
       {
         window.alert("Please pick a Unit")
@@ -186,16 +199,20 @@ class NurseDash extends Component {
       })
     })
     .then(r => r.json())
-    .then(this.setState({currentNurse: {...this.state.currentNurse.shifts = null}}))
+    .then(r => {
+      let updatedArray = this.state.currentNurse.shifts.filter(thisShift => thisShift.id != shift)
+      console.log(updatedArray);
+      this.setState({currentNurse: {...this.state.currentNurse, shifts: updatedArray}})
+    })
   }
 
 
   renderShiftForm = () => {
     return (
       <div>
-        <Card className="shift" bg="primary" text="white" style={{ width: '25rem'}}>
+        <Card className="shift" bg="primary" text="white" style={{ width: '79rem'}}>
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
+            <Card.Title>Select A Zone and press enter to start a shift</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">Current time: {this.state.time}</Card.Subtitle>
             <Card.Text>
               <DropdownButton id="dropdown-item-button" title="Dropdown button">
@@ -222,21 +239,30 @@ class NurseDash extends Component {
       return this.state.currentNurse.shifts.map(shift => {
         if (!shift.time_out){
           return (
-          <Card className="shift" style={{ width: '18rem' }}>
-            <Card.Img variant="top" src="https://loading.io/spinners/typing/lg.-text-entering-comment-loader.gif" />
-            <Card.Body>
-              <Card.Title>Unit: {shift.unit.name}</Card.Title>
-              <Card.Text>
-                This shift is currently open.
-                it began at {shift.time_in}
-              </Card.Text>
-              <Button variant="primary" onClick={() => this.endShift(shift.id)}>Clock Out</Button>
-            </Card.Body>
-          </Card>
+            <div className='shift-card-container'>
+              <Card className="shift-card" style={{ width: '18rem' }}>
+                <Card.Img variant="top" src="https://loading.io/spinners/typing/lg.-text-entering-comment-loader.gif" />
+                <Card.Body>
+                  <Card.Title>Unit: {shift.unit.name}</Card.Title>
+                  <Card.Text>
+                    This shift is currently open.
+                    it began at {shift.time_in}
+                  </Card.Text>
+                  <Button variant="primary" onClick={() => this.endShift(shift.id)}>Clock Out</Button>
+                </Card.Body>
+              </Card>
+            </div>
           )
         }
       })
     }
+  }
+
+  RenderAgenda = () => {
+     return (<Agenda
+        residents={this.state.currentNurse.shifts.find(shift => shift.time_out == null).unit.residents}
+        />
+      )
   }
 
 
@@ -252,9 +278,10 @@ class NurseDash extends Component {
         <button onClick={this.openAlertForm}>Create Alert</button>
         <button onClick={this.openAppointmentForm}>Create Appoinment</button>
         <button onClick={this.openShiftForm}>Initiate Shift</button><br/>
-        {this.showOpenShifts()}<br/>
-        {this.state.currentNurse.shifts && this.state.currentNurse.shifts.find(shift => shift.time_out == null) ? <Agenda residents={this.state.currentNurse.shifts.find(shift => shift.time_out == null).unit.residents}/> : "Start a shift to see schedule"}
-
+        <div className="shift-card-container">
+        <CardDeck> {this.showOpenShifts()}</CardDeck><br/>
+        </div>
+        {this.state.currentNurse.shifts && this.state.currentNurse.shifts.find(shift => shift.time_out == null) ? this.RenderAgenda() : "Start a shift to see schedule"}
         </div>
         }
       </Fragment>

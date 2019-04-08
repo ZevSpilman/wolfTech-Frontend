@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Link, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Login from './components/login'
 import Dashboard from './components/dashboard'
@@ -33,9 +32,9 @@ class App extends Component {
     .then(r => r.json())
     .then(r => this.setState({alerts: r}))
 
-    fetch('http://localhost:3000/api/v1/appointments')
+    fetch('http://localhost:3000/api/v1/alerts')
     .then(r => r.json())
-    .then(r => this.props.dispatch({type: 'ADD_APPOINTMENTS', payload: r}))
+    .then(r => this.props.dispatch({type: "ADD_ALERTS", payload: r}))
 
     fetch('http://localhost:3000/api/v1/units')
     .then(r => r.json())
@@ -52,7 +51,7 @@ class App extends Component {
       <div className="App">
 
 
-      <Route path="/login" exact render={(props) => {
+      <Route path="/" exact render={(props) => {
         return (
           <Fragment>
             <Login/>
@@ -61,11 +60,13 @@ class App extends Component {
       }}/>
 
       <Route path="/admin/dashboard" exact render={(props) => {
-        return (
-          <Fragment>
-            <Dashboard />
-          </Fragment>
-        )
+        if(this.state.alerts){
+          return (
+            <Fragment>
+              <Dashboard />
+            </Fragment>
+          )
+        }
       }}/>
 
       <Route path="/admin/assignments" exact render={(props) => {
@@ -101,9 +102,9 @@ class App extends Component {
       }}/>
 
 
-      <Route path="/nurse/:id" exact render={(props) => {
-        let currentNurse = parseInt(props.match.params.id)
+      <Route path="/nurse" exact render={(props) => {
           if (this.state.nurses){
+            let currentNurse = this.state.nurses.find(nurse => nurse.name === localStorage.getItem('currentNurse'))
             return (
               <NurseDash currentNurse={currentNurse} allNurses={this.state.nurses}/>
             )
@@ -114,7 +115,9 @@ class App extends Component {
     );
   }
 }
-
+const mapStateToProps = (state) => {
+  return ({currentNurse: state.currentNurse})
+}
 
 
 
