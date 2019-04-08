@@ -32,12 +32,20 @@ class NurseDash extends Component {
      1000
    );
     if (this.props.allNurses){
+      if (!this.props.currentNurse){
+        window.location.replace("http://localhost:3001/")
+      }
+      else if (this.props.currentNurse.name=="Zev") {
+        window.location.replace("http://localhost:3001/admin/dashboard");
+      }
       let theNurse = this.props.allNurses.find(n => n.name == this.props.currentNurse.name)
       this.setState({currentNurse: theNurse})
     }
   }
 
   componentWillUnmount(){
+    debugger
+    console.log("clearing interval");
     clearInterval(this.intervalID);
   }
 
@@ -265,10 +273,19 @@ class NurseDash extends Component {
       )
   }
 
+  handleLogout = () => {
+    clearInterval(this.intervalID);
+    localStorage.setItem('currentNurse', null);
+    window.location.replace("http://localhost:3001/");
+  }
+
 
   render(){
     return (
       <Fragment>
+        <Button onClick={this.handleLogout}>
+        Logout
+        </Button>
         {
         this.state.alertFrom ? <div>{this.renderAlertForm()} </div> :
         this.state.appoinmentForm ? <div>{this.renderAppointmentForm()}</div> :

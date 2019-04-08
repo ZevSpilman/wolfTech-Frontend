@@ -63,7 +63,7 @@ class App extends Component {
         if(this.state.alerts){
           return (
             <Fragment>
-              <Dashboard />
+              <Dashboard alerts={this.state.alert}/>
             </Fragment>
           )
         }
@@ -94,7 +94,6 @@ class App extends Component {
 
       <Route path="/admin/alerts" exact render={(props) => {
         if (this.state.alerts){
-          console.log(this.state.nurses);
         return (
           <Alerts allAlerts={this.state.alerts}/>
         )
