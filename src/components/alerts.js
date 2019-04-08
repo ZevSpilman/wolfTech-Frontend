@@ -1,11 +1,13 @@
 import React, {Fragment, Component} from 'react'
 import {connect} from 'react-redux'
 import { Link, Route } from 'react-router-dom'
+import { ActionCableConsumer } from 'react-actioncable-provider';
 
 
 class Alerts extends Component {
   state = {
-    alertClicked: ''
+    alertClicked: '',
+    allAlerts: this.props.allAlerts
   }
 
   renderAlertInfo = () => {
@@ -47,7 +49,7 @@ class Alerts extends Component {
   }
 
   renderAlerts = () => {
-    return this.props.allAlerts.map(alert => {
+    return this.state.allAlerts.map(alert => {
       return(
          <p className={alert.resolved ? "resolved-alert" : "unresolved-alert"} onClick={() => this.handleAlertClick(alert)}>{alert.message}</p>
       )
@@ -57,6 +59,12 @@ class Alerts extends Component {
   render(){
     return (
       <Fragment>
+      <ActionCableConsumer
+        channel={{ channel: 'AlertChannel' }}
+        onReceived={alert => {
+          let newArray = [...this.state.allAlerts, alert]
+          this.setState({allAlerts: newArray})
+        }}/>
       <Link to="/admin/dashboard">
         <button>
          Home

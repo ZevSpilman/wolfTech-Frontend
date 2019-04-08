@@ -1,45 +1,70 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {connect} from 'react-redux';
 import { Link, Route } from 'react-router-dom'
 import {Button} from 'react-bootstrap'
+import { ActionCableConsumer } from 'react-actioncable-provider';
 
-const Dashboard = (props) => {
 
+class Dashboard extends Component {
+  state = {
+    numOfAlerts:null
+  }
 
-  return (
-    <div>
-    <h1>Good Morning</h1>
+  componentWillReceiveProps(props){
+     this.setState({numOfAlerts: props.alerts.length})
+  }
 
-    <div className="people-div">
-     <Link to="/admin/residents">
-     <Button
-     className='people-tile'>
-      big button with amount of residents Rooms/Residents
-     </Button>
-     </Link>
-    </div>
+   handleLogout = () => {
+    localStorage.setItem('currentNurse', null);
+    window.location.replace("http://localhost:3001/");
+  }
 
-    <div className="people-div">
-     <Link to="/admin/nurses">
-     <Button
-     className='people-tile'>
-      Nurses maybe call it staff
-     </Button>
-     </Link>
-     </div>
+  render() {
+    return (
+        <div>
+      <ActionCableConsumer
+        channel={{ channel: 'AlertChannel' }}
+        onReceived={alert => {
+          console.log(alert);
+          let newNum = this.state.numOfAlerts + 1
+          this.setState({numOfAlerts: newNum})
+        }}
+      />
+      <h1>Good Morning</h1>
+      <Button onClick={this.handleLogout}>
+      Logout
+      </Button>
+      <div className="people-div">
+       <Link to="/admin/residents">
+       <Button
+       className='people-tile'>
+        big button with amount of residents Rooms/Residents
+       </Button>
+       </Link>
+      </div>
 
-      <div className="alert-div">
-     <Link to="/admin/alerts">
-     <Button
-     className='alert-tile'
-      variant="danger"
-      size="lg">
-      Alerts: {props.alerts? props.alerts.length:"nope"}
-     </Button>
-     </Link>
-     </div>
-    </div>
-  )
+      <div className="people-div">
+       <Link to="/admin/nurses">
+       <Button
+       className='people-tile'>
+        Nurses maybe call it staff
+       </Button>
+       </Link>
+       </div>
+
+        <div className="alert-div">
+       <Link to="/admin/alerts">
+       <Button
+       className='alert-tile'
+        variant="danger"
+        size="lg">
+        Alerts: {this.state.numOfAlerts? `alerts ${this.state.numOfAlerts}`:"nope"}
+       </Button>
+       </Link>
+       </div>
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
