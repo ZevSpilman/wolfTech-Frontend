@@ -2,6 +2,9 @@
 @import '~react-agenda/build/styles.css';
 @import '~react-datetime/css/react-datetime.css';
 
+
+
+
 .App {
   text-align: center;
 }
@@ -37,15 +40,58 @@
 }
 
 .shift {
-  border: 3px solid black;
+  border: 1px solid black;
 }
 
 .resolved-alert{
-  animation: App-logo-spin infinite 10s linear;
 border: 3px solid black;
 }
 
 .unresolved-alert{
-  animation: App-logo-spin infinite 10s linear;
   border: 3px solid red;
+}
+
+.shift {
+  padding-left: 20px;
+}
+
+.alert-tile {
+  width: 500px;
+  height: 300px;
+}
+
+.alert-div{
+  padding-right: 700px;
+  padding-bottom: 25px;
+}
+
+.people-tile {
+  width: 500px;
+  height: 300px;
+}
+
+.people-div{
+  padding-left: 700px;
+}
+
+.schedule{
+  border: 3px solid black;
+  padding-left: 150px;
+  padding-right: 150px;
+}
+
+.shift-card {
+  height: 600px;
+}
+
+.shift-card-container {
+
+}
+
+.shift-logs {
+    border: 3px solid black;
+    padding-left: 400px;
+    padding-right: 400px;
+    padding-top: 40px;
+    padding-bottom: 40px;
 }

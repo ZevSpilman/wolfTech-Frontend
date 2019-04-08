@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import ReactModal from 'react-modal';
 import { Link, Route } from 'react-router-dom'
 import App from '../App.css'
+import {CardDeck, Card, Button, ListGroup} from 'react-bootstrap'
+
 
 class Nurses extends Component {
   state={
@@ -12,25 +14,28 @@ class Nurses extends Component {
   shiftLogs = () => {
     let myNurse = this.props.allNurses.find(nurse => nurse.id == this.state.nurseClicked)
       return myNurse.shifts.map(shift => {
-        return (<div className="shift">
-            <p>{shift.time_in}</p>
-            <p>{shift.time_out}</p>
-            <p>Unit: {shift.unit.name}</p>
-            <p>residents: {shift.unit.residents.map(resident => `${resident.name} `)}</p>
-          </div>
+        return (
+           <ListGroup.Item>
+              <p>{shift.time_in}</p>
+              <p>{shift.time_out}</p>
+              <p>Unit: {shift.unit.name}</p>
+              <p>residents: {shift.unit.residents.map(resident => `${resident.name} `)}</p>
+            </ListGroup.Item>
         )
       })
   }
 
-
   renderNurseInfo = () => {
     let myNurse = this.props.allNurses.find(nurse => nurse.id == this.state.nurseClicked)
-    console.log(myNurse);
     return (
       <div>
       <h1>{myNurse.name}</h1>
       <p>{myNurse.logged_in == true? "Logged IN":"Logged OUT"}</p>
-      {this.shiftLogs()}
+      <div className="shift-logs">
+      <ListGroup>
+        {this.shiftLogs()}
+        </ListGroup>
+      </div>
       <button onClick={this.resetNurse}>Back</button>
       </div>
     )
@@ -38,11 +43,18 @@ class Nurses extends Component {
 
   renderNurses = () => {
       return this.props.allNurses.map((nurse) => {
-      return (<div>
-        <p onClick={() => this.setNurse(nurse.id)}>
-        {nurse.name}
-        </p>
-
+      return (
+        <div>
+        <Card style={{ width: '18rem' }}>
+          <Card.Img variant="top" src="" />
+          <Card.Body>
+            <Card.Title>{nurse.name}</Card.Title>
+            <Card.Text>
+              Age: {nurse.age}<br/>
+            </Card.Text>
+            <Button variant="primary" onClick={() => this.setNurse(nurse.id)}>Go somewhere</Button>
+          </Card.Body>
+        </Card>
         </div>
       )
     })
@@ -64,7 +76,7 @@ class Nurses extends Component {
            Home
           </button>
         </Link>
-        {this.state.nurseClicked =='' ? this.renderNurses(): this.renderNurseInfo()}
+        {this.state.nurseClicked === '' ? <CardDeck>{this.renderNurses()}</CardDeck> : this.renderNurseInfo()}
       </Fragment>
     )
   }

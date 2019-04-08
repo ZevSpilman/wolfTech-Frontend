@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux';
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory();
 
 class Login extends Component {
 
@@ -16,8 +18,10 @@ class Login extends Component {
     this.setState({passInput: e.target.value})
   }
 
-  handleSubmit = (e) => {
-    this.props.dispatch({type: "LOGIN", payload: this.state.userInput})
+  handleSubmit = () => {
+    localStorage.setItem('currentNurse', this.state.userInput);
+    window.location.replace("http://localhost:3001/nurse");
+
   }
 
   render(){
