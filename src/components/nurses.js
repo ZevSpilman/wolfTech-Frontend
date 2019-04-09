@@ -8,7 +8,11 @@ import {CardDeck, Card, Button, ListGroup} from 'react-bootstrap'
 
 class Nurses extends Component {
   state={
-    nurseClicked: ''
+    nurseClicked: '',
+    searchInput: '',
+    filteredNurses: this.props.allNurses,
+    nurses: this.props.allNurses
+
   }
 
   shiftLogs = () => {
@@ -42,7 +46,7 @@ class Nurses extends Component {
   }
 
   renderNurses = () => {
-      return this.props.allNurses.map((nurse) => {
+      return this.state.filteredNurses.map((nurse) => {
       return (
         <div>
         <Card style={{ width: '18rem' }}>
@@ -68,6 +72,12 @@ class Nurses extends Component {
     this.setState({nurseClicked: ''})
   }
 
+  handleSearchInput = (e) => {
+    this.setState({searchInput: e.target.value})
+    let filtered = this.state.nurses.filter(nurse => nurse.name.includes(e.target.value))
+    this.setState({filteredNurses: filtered})
+  }
+
   render(){
     return (
       <Fragment>
@@ -76,6 +86,9 @@ class Nurses extends Component {
            Home
           </button>
         </Link>
+        <div>
+        <input type='text' value={this.state.searchInput} onChange={this.handleSearchInput}></input>
+        </div>
         {this.state.nurseClicked === '' ? <CardDeck>{this.renderNurses()}</CardDeck> : this.renderNurseInfo()}
       </Fragment>
     )

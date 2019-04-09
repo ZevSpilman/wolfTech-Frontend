@@ -14,7 +14,6 @@ function reducer(state = initialState, action) {
     return {...state, currentNurse: action.payload}
     default:
     return state
-
   }
 }
 

@@ -6,8 +6,16 @@ import {Card, Button, CardDeck} from 'react-bootstrap'
 
 class Residents extends Component {
   state = {
-    residentClicked: ''
+    residentClicked: '',
+    searchInput: '',
+    filteredResidents: this.props.residents,
+    residents: this.props.residents
   }
+
+  componentWillReceiveProps(props){
+    this.setState({residents: this.props.residents, filteredResidents: this.props.residents})
+  }
+
 
   renderResidentInfo = () => {
     console.log(" in renderResidentInfo",this.state.residentClicked);
@@ -24,7 +32,8 @@ class Residents extends Component {
   }
 
   renderResidents = () => {
-      return this.props.residents.map(resident => {
+    if (this.state.filteredResidents){
+      return this.state.filteredResidents.map(resident => {
       return (<div>
         <Card style={{ width: '18rem' }}>
           <Card.Img variant="top" src="" />
@@ -40,6 +49,8 @@ class Residents extends Component {
         </div>
       )
     })
+    }
+
   }
 
   setResident = (resident) => {
@@ -51,6 +62,12 @@ class Residents extends Component {
     this.setState({residentClicked: ''})
   }
 
+  handleSearchInput = (e) => {
+    this.setState({searchInput: e.target.value})
+    let filtered = this.state.residents.filter(resident => resident.name.includes(e.target.value))
+    this.setState({filteredResidents: filtered})
+  }
+
   render(){
     console.log(this.state.residentClicked);
     return (
@@ -60,6 +77,7 @@ class Residents extends Component {
          Home
         </button>
       </Link>
+      <input type='text' value={this.state.searchInput} onChange={this.handleSearchInput}></input>
         {this.state.residentClicked === '' ? <CardDeck>{this.renderResidents()}</CardDeck> : this.renderResidentInfo()}
       </Fragment>
     )

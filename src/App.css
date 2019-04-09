@@ -1,6 +1,7 @@
 
 @import '~react-agenda/build/styles.css';
 @import '~react-datetime/css/react-datetime.css';
+@import '~react-notifications/lib/notifications.css';
 
 
 /* body {

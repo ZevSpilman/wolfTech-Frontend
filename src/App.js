@@ -28,6 +28,10 @@ class App extends Component {
     .then(r => r.json())
     .then(r => this.props.dispatch({type: 'ADD_RESIDENTS', payload: r}))
 
+    fetch('http://localhost:3000/api/v1/nurses')
+    .then(r => r.json())
+    .then(r => this.props.dispatch({type: 'ADD_NURSES', payload: r}))
+
     fetch('http://localhost:3000/api/v1/alerts')
     .then(r => r.json())
     .then(r => this.setState({alerts: r}))

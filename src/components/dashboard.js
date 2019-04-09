@@ -3,11 +3,13 @@ import {connect} from 'react-redux';
 import { Link, Route } from 'react-router-dom'
 import {Button} from 'react-bootstrap'
 import { ActionCableConsumer } from 'react-actioncable-provider';
+import Notification from './notification'
 
 
 class Dashboard extends Component {
   state = {
-    numOfAlerts:null
+    numOfAlerts:null,
+    alert: null
   }
 
   componentWillReceiveProps(props){
@@ -19,6 +21,10 @@ class Dashboard extends Component {
     window.location.replace("http://localhost:3001/");
   }
 
+  cancelAlert = () => {
+    this.setState({alert: null})
+  }
+
   render() {
     return (
         <div>
@@ -28,9 +34,11 @@ class Dashboard extends Component {
           console.log(alert);
           let newNum = this.state.numOfAlerts + 1
           this.setState({numOfAlerts: newNum})
+          this.setState({alert: alert.message})
         }}
       />
       <h1>Good Morning</h1>
+      {this.state.alert? <Notification alert={this.state.alert} cancelAlert={this.cancelAlert}/>:''}
       <Button onClick={this.handleLogout}>
       Logout
       </Button>
