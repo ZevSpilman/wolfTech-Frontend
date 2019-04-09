@@ -44,7 +44,6 @@ class NurseDash extends Component {
   }
 
   componentWillUnmount(){
-    debugger
     console.log("clearing interval");
     clearInterval(this.intervalID);
   }
@@ -55,7 +54,7 @@ class NurseDash extends Component {
    })
  }
 
- setSelectedDate = date => this.setState({ date })
+  setSelectedDate = date => this.setState({ date })
 
   renderResidents = () => {
     if (this.state.currentNurse.residents){
@@ -96,6 +95,7 @@ class NurseDash extends Component {
 
   handleSubmitAppointment = (e) => {
     e.preventDefault()
+    debugger
     fetch('http://localhost:3000/api/v1/appointments', {
       method: "POST",
       headers: {
@@ -111,7 +111,7 @@ class NurseDash extends Component {
     })
     .then(r => r.json())
     .then(r => {
-      debugger
+      
       this.openAppointmentForm()
     })
   }
@@ -128,8 +128,6 @@ class NurseDash extends Component {
 
   handleAppointmentInput = (e, module) => {
     switch (module) {
-      case "id":
-      return this.setState({appoinmentInputResidentId: e.target.value})
       case "type":
       return this.setState({appoinmentInputType: e.target.value})
       case "date":
@@ -137,22 +135,40 @@ class NurseDash extends Component {
     }
   }
 
+  handleResidentInput = (e) => {
+    e.preventDefault()
+    this.setState({appoinmentInputResidentId: e.target.id})
+  }
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
   renderAppointmentForm = () => {
     return (
-      <form onSubmit={(e) => this.handleSubmitAppointment(e)}>
-        <input placeholder={"resident-id"} type="text" value={this.state.appoinmentInputResidentId} onChange={(e) => this.handleAppointmentInput(e, "id")}></input><br/><br/>
+      <form >
+      <DropdownButton id="dropdown-item-button" title="Resident">
+        {this.currentResidents().map(resident => {
+          return <Dropdown.Item
+            id={resident.id}
+            as="button"
+            onClick={(e)=>this.handleResidentInput(e)}>
+            {resident.name}
+          </Dropdown.Item>
+        })}
+      </DropdownButton>
         <input placeholder={"type of oppointment"} type="text" value={this.state.appoinmentInputType} onChange={(e) => this.handleAppointmentInput(e, "type")}></input><br/><br/>
         <DateTimePicker
           onChange={this.setSelectedDate}
           value={this.state.date}
         />
         <input type="number" placeholder={"duration in minutes"} onChange={this.handleDuration}></input>
-        <input type="submit" value={"Submit appoinment"}></input>
+        <button onClick={(e) => this.handleSubmitAppointment(e)}> Submit appoinment</button>
         <button onClick={this.openAppointmentForm}>Back</button>
       </form>
     )
   }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
   handleDuration = (e) => {
     this.setState({appointmentDuration: e.target.value})
@@ -227,7 +243,7 @@ class NurseDash extends Component {
                 <Dropdown.Item id="1" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit A</Dropdown.Item>
                 <Dropdown.Item id="2" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit B</Dropdown.Item>
                 <Dropdown.Item id="3" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit C</Dropdown.Item>
-                <Dropdown.Item id= "4" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit D</Dropdown.Item>
+                <Dropdown.Item id="4" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit D</Dropdown.Item>
               </DropdownButton>
             </Card.Text>
             <button onClick={this.startShift}>Start Shift</button>
@@ -240,6 +256,7 @@ class NurseDash extends Component {
 
   handleUnitSelection = (e) => {
     this.setState({selected_unit_id: e})
+    console.log(this.state.selected_unit_id);
   }
 
   showOpenShifts = () => {
@@ -266,9 +283,24 @@ class NurseDash extends Component {
     }
   }
 
+  currentResidents = () => {
+    if (this.state.currentNurse.shifts){
+
+      if (this.state.currentNurse.shifts.find(shift => shift.time_out == null))
+      return this.state.currentNurse.shifts.find(shift => shift.time_out == null).unit.residents
+
+      else {
+        return false
+      }
+    }
+    else {
+      return false
+    }
+  }
+
   RenderAgenda = () => {
      return (<Agenda
-        residents={this.state.currentNurse.shifts.find(shift => shift.time_out == null).unit.residents}
+        residents={this.currentResidents()}
         />
       )
   }
@@ -293,7 +325,7 @@ class NurseDash extends Component {
         <div><p>Welcome {this.state.currentNurse.name}!</p>
         {this.renderResidents()}
         <button onClick={this.openAlertForm}>Create Alert</button>
-        <button onClick={this.openAppointmentForm}>Create Appoinment</button>
+        {this.currentResidents()? <button onClick={this.openAppointmentForm}>Create Appoinment</button>: ''}
         <button onClick={this.openShiftForm}>Initiate Shift</button><br/>
         <div className="shift-card-container">
         <CardDeck> {this.showOpenShifts()}</CardDeck><br/>

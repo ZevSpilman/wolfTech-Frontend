@@ -50,9 +50,9 @@ class Nurses extends Component {
           <Card.Body>
             <Card.Title>{nurse.name}</Card.Title>
             <Card.Text>
-              Age: {nurse.age}<br/>
+              Position: Nurse
             </Card.Text>
-            <Button variant="primary" onClick={() => this.setNurse(nurse.id)}>Go somewhere</Button>
+            <Button variant="primary" onClick={() => this.setNurse(nurse.id)}>INFO</Button>
           </Card.Body>
         </Card>
         </div>
