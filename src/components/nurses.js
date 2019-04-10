@@ -50,7 +50,7 @@ class Nurses extends Component {
       return (
         <div>
         <Card style={{ width: '18rem' }}>
-          <Card.Img variant="top" src="" />
+          <Card.Img variant="top" src="https://cdn.technologyreview.com/i/images/faceapp1.jpg?sw=600&cx=0&cy=0&cw=1280&ch=720" />
           <Card.Body>
             <Card.Title>{nurse.name}</Card.Title>
             <Card.Text>

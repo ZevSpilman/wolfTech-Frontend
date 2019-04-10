@@ -8,6 +8,9 @@ import { BrowserRouter as Router} from 'react-router-dom';
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import { ActionCableProvider } from 'react-actioncable-provider';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "bootstrap-css-only/css/bootstrap.min.css";
+import "mdbreact/dist/css/mdb.css";
 
 import reducer from './reducer';
 

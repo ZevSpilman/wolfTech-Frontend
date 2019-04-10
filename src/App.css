@@ -4,6 +4,7 @@
 @import '~react-notifications/lib/notifications.css';
 
 
+
 /* body {
    background-image: url(".ico");
    background-repeat: no-repeat;
@@ -96,8 +97,21 @@ border: 3px solid black;
 
 .shift-logs {
     border: 3px solid black;
-    padding-left: 400px;
+    padding-left: 200px;
     padding-right: 400px;
     padding-top: 40px;
     padding-bottom: 40px;
+}
+
+.sign-up {
+  padding-top: 250px;
+  background-color: navy;
+}
+
+.login-card{
+  width: 1000px;
+}
+
+.signup-container{
+    background-color: navy;
 }

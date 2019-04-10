@@ -9,17 +9,20 @@ import Nurses from './components/nurses'
 import Alerts from './components/alerts'
 import NurseDash from './components/nurse-dashboard'
 
+
 class App extends Component {
 
   state = {
     nurses: null,
     alerts: null,
     units: null,
-    shifts: null
+    shifts: null,
+    currentNurse: null
+
   }
 
 
-  componentDidMount(){
+  componentWillMount(){
     fetch('http://localhost:3000/api/v1/nurses')
     .then(r => r.json())
     .then(r => this.setState({nurses: r}))
@@ -49,16 +52,24 @@ class App extends Component {
     .then(r => this.setState({shifts: r}))
   }
 
+  setCurrentNurse = (response) => {
+
+		// localStorage.setItem("token", response.jwt)
+		this.setState({
+			currentNurse: response
+		})
+
+	}
+
 
   render() {
     return (
       <div className="App">
 
-
       <Route path="/" exact render={(props) => {
         return (
-          <Fragment>
-            <Login/>
+          <Fragment >
+            <Login setCurrentNurse={this.setCurrentNurse}/>
           </Fragment>
         )
       }}/>
@@ -88,8 +99,7 @@ class App extends Component {
       }}/>
 
       <Route path="/admin/nurses" exact render={(props) => {
-        if (this.state.nurses){
-          console.log(this.state.nurses);
+        if (this.state.nurses && this.state.nurses[0]){
         return (
           <Nurses allNurses={this.state.nurses}/>
         )
@@ -108,6 +118,7 @@ class App extends Component {
       <Route path="/nurse" exact render={(props) => {
           if (this.state.nurses){
             let currentNurse = this.state.nurses.find(nurse => nurse.name === localStorage.getItem('currentNurse'))
+
             return (
               <NurseDash currentNurse={currentNurse} allNurses={this.state.nurses}/>
             )
