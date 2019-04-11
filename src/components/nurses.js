@@ -45,6 +45,7 @@ class Nurses extends Component {
     )
   }
 
+
   renderNurses = () => {
       return this.state.filteredNurses.map((nurse) => {
       return (
@@ -87,7 +88,7 @@ class Nurses extends Component {
           </button>
         </Link>
         <div>
-        <input type='text' value={this.state.searchInput} onChange={this.handleSearchInput}></input>
+        {this.state.nurseClicked === '' ? <input type='text' value={this.state.searchInput} onChange={this.handleSearchInput}></input> : ''}
         </div>
         {this.state.nurseClicked === '' ? <CardDeck>{this.renderNurses()}</CardDeck> : this.renderNurseInfo()}
       </Fragment>

@@ -37,7 +37,12 @@ class Alerts extends Component {
       })
     })
     .then(r => r.json())
-    .then(console.log)
+    .then(this.alertColor())
+  }
+
+  alertColor = (r) => {
+    let myAlert = this.state.allAlerts.find(alert => alert.id == this.state.alertClicked.id)
+    myAlert.resolved = true
   }
 
   handleAlertUnClick = () => {

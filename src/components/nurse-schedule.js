@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactAgenda , ReactAgendaCtrl , guid } from 'react-agenda';
 
-require('moment/locale/fr.js');
+require('moment/locale/en-gb.js');
 
 var colors= {
   'color-1':"rgba(102, 195, 131 , 1)" ,

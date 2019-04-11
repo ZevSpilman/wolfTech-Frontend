@@ -8,8 +8,10 @@ import {Card, CardDeck} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import Agenda from './nurse-schedule'
 import DateTimePicker from 'react-datetime-picker';
-import { MDBJumbotron, MDBContainer } from "mdbreact";
+import { MDBJumbotron, MDBContainer, MDBIcon } from "mdbreact";
 import { ReactAgenda , ReactAgendaCtrl , guid } from 'react-agenda';
+import AlertForm from './alert-form'
+
 
 function parseISOString(s) {
   var b = s.split(/\D+/);
@@ -37,7 +39,6 @@ class NurseDash extends Component {
     newAppointment: []
   }
 
-
   componentDidMount(){
     this.intervalID = setInterval(
      () => this.tick(),
@@ -54,20 +55,16 @@ class NurseDash extends Component {
       this.setState({currentNurse: theNurse})
     }
   }
-
   componentWillUnmount(){
     console.log("clearing interval");
     clearInterval(this.intervalID);
   }
-
   tick() {
    this.setState({
      time: new Date().toLocaleString()
    })
  }
-
   setSelectedDate = date => this.setState({ date })
-
   renderResidents = () => {
     if (this.state.currentNurse.residents){
       return this.state.currentNurse.residents.map(resident => {
@@ -75,36 +72,12 @@ class NurseDash extends Component {
       })
     }
   }
-
   openAlertForm = () => {
     this.setState({alertFrom: !this.state.alertFrom})
   }
   openAppointmentForm = () => {
     this.setState({appoinmentForm: !this.state.appoinmentForm})
   }
-
-  handleAlertForm = (e) => {
-    this.setState({alertInput: e.target.value})
-  }
-
-  handleSubmitAlert = (e) => {
-    fetch("http://localhost:3000/api/v1/alerts", {
-      method: "POST",
-      headers: {
-        "Content-Type": 'application/json',
-        Accepts: 'application/json'
-      },
-      body: JSON.stringify({
-       nurse_id: this.state.currentNurse.id,
-       message: this.state.alertInput,
-       admin_id: 1,
-       resolved: false
-
-     })
-    })
-    .then(this.renderDoneMessage())
-  }
-
   handleSubmitAppointment = (e) => {
     e.preventDefault()
     fetch('http://localhost:3000/api/v1/appointments', {
@@ -127,17 +100,6 @@ class NurseDash extends Component {
       this.openAppointmentForm()
     })
   }
-
-  renderAlertForm = () => {
-    return (
-      <form onSubmit={(e) => this.handleSubmitAlert(e)}>
-        <input placeholder={"message"} type="text" value={this.state.alertInput} onChange={this.handleAlertForm}></input><br/><br/>
-        <input type="submit" value={"Submit Alert"}></input>
-          <button onClick={this.openAlertForm}>Back</button>
-      </form>
-    )
-  }
-
   handleAppointmentInput = (e, module) => {
     switch (module) {
       case "type":
@@ -146,15 +108,10 @@ class NurseDash extends Component {
       return this.setState({appoinmentInputDate: e.target.value})
     }
   }
-
   handleResidentInput = (e) => {
     e.preventDefault()
     this.setState({appoinmentInputResidentId: e.target.id})
   }
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
   renderAppointmentForm = () => {
     let residents = this.state.currentNurse.shifts.find(shift => shift.time_out == null).unit.residents
     return (
@@ -180,20 +137,14 @@ class NurseDash extends Component {
       </form>
     )
   }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
   handleDuration = (e) => {
     this.setState({appointmentDuration: e.target.value})
   }
-
   renderDoneMessage = () => {
   }
-
   openShiftForm = () => {
     this.setState({shiftFrom: !this.state.shiftFrom})
   }
-
   startShift = () => {
     if (this.state.selected_unit_id){
         fetch(`http://localhost:3000/api/v1/shifts`, {
@@ -225,7 +176,6 @@ class NurseDash extends Component {
         window.alert("Please pick a Unit")
       }
   }
-
   endShift = (shift) => {
     fetch(`http://localhost:3000/api/v1/shifts/${shift}`, {
       method: 'PATCH',
@@ -244,8 +194,6 @@ class NurseDash extends Component {
       this.setState({currentNurse: {...this.state.currentNurse, shifts: updatedArray}})
     })
   }
-
-
   renderShiftForm = () => {
     return (
       <div>
@@ -268,12 +216,10 @@ class NurseDash extends Component {
       </div>
     )
   }
-
   handleUnitSelection = (e) => {
     this.setState({selected_unit_id: e})
     console.log(this.state.selected_unit_id);
   }
-
   showOpenShifts = () => {
     if (this.state.currentNurse.shifts){
       return this.state.currentNurse.shifts.map(shift => {
@@ -297,8 +243,6 @@ class NurseDash extends Component {
       })
     }
   }
-
-
   currentAppoinments = () => {
     let items = []
     if (this.state.currentNurse.shifts){
@@ -324,7 +268,6 @@ class NurseDash extends Component {
       return false
     }
   }}
-
   RenderAgenda = () => {
     if (this.state.firstTime){
       return (
@@ -336,6 +279,9 @@ class NurseDash extends Component {
     else{
       //the adjeca component is receiving the new props with the new event included but its not rendering the new event on the calendar
       //on the refresh it works obviously.
+      //the adjenda component rerenders every second and im pretty sure its cuz there is a bar on the adgenda that moves with time
+      //so it is receiving the props and even if it is not rerendering when it receivs them it should rerendder with the new appointment
+      //when it does its secondly reredner
       let prevAppointments = this.currentAppoinments()
       let updated = [...prevAppointments, this.state.newAppointment]
       return (
@@ -346,13 +292,11 @@ class NurseDash extends Component {
     }
 
   }
-
   handleLogout = () => {
     clearInterval(this.intervalID);
     localStorage.setItem('currentNurse', null);
     window.location.replace("http://localhost:3001/");
   }
-
   renderJumbotron = (callBack, text) => {
     return(
       <MDBJumbotron fluid>
@@ -363,27 +307,29 @@ class NurseDash extends Component {
       </MDBJumbotron>)
   }
 
-
+  hasOpenShift = () =>{
+    return this.state.currentNurse.shifts && this.state.currentNurse.shifts.find(shift => shift.time_out == null)
+  }
 
   render(){
     return (
       <Fragment>
         <Button onClick={this.handleLogout}>
-        Logout
+        Logout<MDBIcon icon="user-lock" />
         </Button>
         {
-        this.state.alertFrom ? <div>{this.renderAlertForm()} </div> :
+        this.state.alertFrom ? <AlertForm currentNurse={this.state.currentNurse.id} back={this.openAlertForm}/> :
         this.state.appoinmentForm ? <div>{this.renderAppointmentForm()}</div> :
         this.state.shiftFrom ? this.renderShiftForm() :
         <div><p>Welcome {this.state.currentNurse.name}!</p>
         {this.renderResidents()}
         {this.renderJumbotron(this.openAlertForm, "Create Alert")}
         {this.renderJumbotron(this.openShiftForm, "Initate Shift")}
-        {this.state.currentNurse.shifts? this.renderJumbotron(this.openAppointmentForm, "Schedule An Appointment")  : ''}
+        {this.hasOpenShift() ? this.renderJumbotron(this.openAppointmentForm, "Schedule An Appointment")  : ''}
         <div className="shift-card-container">
         <CardDeck> {this.showOpenShifts()}</CardDeck><br/>
         </div>
-        {this.state.currentNurse.shifts && this.state.currentNurse.shifts.find(shift => shift.time_out == null) ? this.RenderAgenda() : "Start a shift to see schedule"}
+        {this.hasOpenShift() ? this.RenderAgenda() : "Start a shift to see schedule"}
         </div>
         }
       </Fragment>

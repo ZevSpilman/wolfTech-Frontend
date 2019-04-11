@@ -63,22 +63,27 @@ border: 3px solid black;
 }
 
 .alert-tile {
-  width: 500px;
-  height: 300px;
+  /* width: 500px;
+  height: 300px; */
 }
 
 .alert-div{
-  padding-right: 700px;
-  padding-bottom: 25px;
+  padding-right: 1050px;
+  padding-bottom: 800px;
+  height: 10px;
+  width: 1000px;
 }
 
 .people-tile {
-  width: 500px;
-  height: 300px;
+
+
+  padding-left: 100px;
+  /* width: 500px;
+  height: 300px; */
 }
 
 .people-div{
-  padding-left: 700px;
+  /* padding-left: 900px; */
 }
 
 .schedule{
@@ -114,4 +119,13 @@ border: 3px solid black;
 
 .signup-container{
     background-color: navy;
+}
+.jumbotron.jumbotron-fluid {
+    background-color: pink;
+    width: 1450px;
+}
+
+.dash-cards {
+  padding-left: 0px;
+align-self: center;
 }

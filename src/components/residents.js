@@ -82,7 +82,9 @@ class Residents extends Component {
          Home
         </button>
       </Link>
-      <input type='text' value={this.state.searchInput} onChange={this.handleSearchInput}></input>
+        <div>
+          {this.state.residentClicked === '' ? <input type='text' value={this.state.searchInput} onChange={this.handleSearchInput}></input>: ''}
+        </div>
         {this.state.residentClicked === '' ? <CardDeck>{this.renderResidents()}</CardDeck> : this.renderResidentInfo()}
       </Fragment>
     )
