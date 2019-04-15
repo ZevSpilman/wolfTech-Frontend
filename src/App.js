@@ -33,7 +33,7 @@ class App extends Component {
 
     fetch('http://localhost:3000/api/v1/nurses')
     .then(r => r.json())
-    .then(r => this.props.dispatch({type: 'ADD_NURSES', payload: r}))
+    .then(r => this.props.dispatch({type: "ADD_NURSES", payload: r}))
 
     fetch('http://localhost:3000/api/v1/alerts')
     .then(r => r.json())
@@ -42,6 +42,10 @@ class App extends Component {
     fetch('http://localhost:3000/api/v1/alerts')
     .then(r => r.json())
     .then(r => this.props.dispatch({type: "ADD_ALERTS", payload: r}))
+
+    fetch('http://localhost:3000/api/v1/shifts')
+    .then(r => r.json())
+    .then(r => this.props.dispatch({type: "ADD_SHIFTS", payload: r}))
 
     fetch('http://localhost:3000/api/v1/units')
     .then(r => r.json())

@@ -5,6 +5,7 @@
 
 
 
+
 /* body {
    background-image: url(".ico");
    background-repeat: no-repeat;
@@ -111,21 +112,31 @@ border: 3px solid black;
 .sign-up {
   padding-top: 250px;
   background-color: navy;
+  border: 1px solid black;
 }
 
 .login-card{
   width: 1000px;
+  border: 1px solid black;
 }
 
 .signup-container{
     background-color: navy;
+    border: 1px solid black;
 }
 .jumbotron.jumbotron-fluid {
     background-color: pink;
     width: 1450px;
+    border: 1px solid black;
 }
 
 .dash-cards {
   padding-left: 0px;
 align-self: center;
+border: 1px solid black;
+}
+
+.progressBars{
+  width: 200px;
+  border: 1px solid black;
 }

@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 
 class Notification extends React.Component {
   createNotification = (type ) => {
-    
+
     return () => {
       switch (type) {
         case 'info':
@@ -18,7 +18,7 @@ class Notification extends React.Component {
           NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
           break;
         case 'error':
-          NotificationManager.error(this.props.alert, 'Click me!', 5000, () => {
+          NotificationManager.error(this.props.alert, 'Check inbox for message!', 5000, () => {
             this.props.cancelAlert();
           });
           break;
@@ -29,9 +29,7 @@ class Notification extends React.Component {
   render() {
     return (
       <div>
-        <hr/>
-        <hr/>
-        <hr/>
+
         <button className='btn btn-info'
           onClick={this.createNotification('error')}>New Notification
         </button>
