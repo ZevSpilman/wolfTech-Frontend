@@ -12,6 +12,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import 'react-circular-progressbar/dist/styles.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 
 import reducer from './reducer';
 

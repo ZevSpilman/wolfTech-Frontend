@@ -8,9 +8,11 @@ import {Card, CardDeck} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import Agenda from './nurse-schedule'
 import DateTimePicker from 'react-datetime-picker';
-import { MDBJumbotron, MDBContainer, MDBIcon } from "mdbreact";
+import { MDBJumbotron, MDBContainer, MDBIcon, MDBBtn } from "mdbreact";
 import { ReactAgenda , ReactAgendaCtrl , guid } from 'react-agenda';
 import AlertForm from './alert-form'
+import NavBar from './nurse-nav'
+
 
 
 function parseISOString(s) {
@@ -65,41 +67,49 @@ class NurseDash extends Component {
    })
  }
   setSelectedDate = date => this.setState({ date })
-  renderResidents = () => {
-    if (this.state.currentNurse.residents){
-      return this.state.currentNurse.residents.map(resident => {
-        return <p>Your Resident: {resident.name}</p>
-      })
-    }
-  }
+
+  // renderResidents = () => {
+  //   if (this.state.currentNurse.residents){
+  //     return this.state.currentNurse.residents.map(resident => {
+  //       return <p>Your Resident: {resident.name}</p>
+  //     })
+  //   }
+  // }
   openAlertForm = () => {
-    this.setState({alertFrom: !this.state.alertFrom})
+    this.setState({shiftFrom:false, appoinmentForm: false, alertFrom: !this.state.alertFrom})
   }
   openAppointmentForm = () => {
-    this.setState({appoinmentForm: !this.state.appoinmentForm})
+    console.log("im here!");
+    this.setState({shiftFrom: false, alertFrom: false, appoinmentForm: !this.state.appoinmentForm})
   }
   handleSubmitAppointment = (e) => {
     e.preventDefault()
-    fetch('http://localhost:3000/api/v1/appointments', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        Accepts: 'application/json'
-      },
-      body: JSON.stringify({
-        time: this.state.date,
-        resident_id: parseInt(this.state.appoinmentInputResidentId),
-        variation: this.state.appoinmentInputType,
-        duration: this.state.appointmentDuration
+    if (this.state.appoinmentInputResidentId == ''){
+      window.alert("Please Choose a resident")
+    }
+    else {
+      fetch('http://localhost:3000/api/v1/appointments', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          Accepts: 'application/json'
+        },
+        body: JSON.stringify({
+          time: this.state.date,
+          resident_id: parseInt(this.state.appoinmentInputResidentId),
+          variation: this.state.appoinmentInputType,
+          duration: this.state.appointmentDuration
+        })
       })
-    })
-    .then(r => r.json())
-    .then(r => {
-      this.setState({newAppointment: r})
-      this.setState({firstTime: false})
-      this.openAppointmentForm()
-    })
+      .then(r => r.json())
+      .then(r => {
+        this.setState({newAppointment: r})
+        this.setState({firstTime: false})
+        this.openAppointmentForm()
+      })
+    }
   }
+
   handleAppointmentInput = (e, module) => {
     switch (module) {
       case "type":
@@ -132,18 +142,19 @@ class NurseDash extends Component {
           value={this.state.date}
         />
         <input type="number" placeholder={"duration in minutes"} onChange={this.handleDuration}></input>
-        <button onClick={(e) => this.handleSubmitAppointment(e)}> Submit appoinment</button>
-        <button onClick={this.openAppointmentForm}>Back</button>
+        <button onClick={(e) => this.handleSubmitAppointment(e)}> Submit appoinment</button><br/>
+        <MDBBtn outline color="secondary" onClick={this.openAppointmentForm}>
+          Back <MDBIcon far icon="hand-peace"  className="ml-1" />
+        </MDBBtn>
       </form>
     )
   }
   handleDuration = (e) => {
     this.setState({appointmentDuration: e.target.value})
   }
-  renderDoneMessage = () => {
-  }
+
   openShiftForm = () => {
-    this.setState({shiftFrom: !this.state.shiftFrom})
+    this.setState({appoinmentForm: false, alertFrom: false, shiftFrom: !this.state.shiftFrom})
   }
   startShift = () => {
     if (this.state.selected_unit_id){
@@ -212,7 +223,9 @@ class NurseDash extends Component {
             <button onClick={this.startShift}>Start Shift</button>
           </Card.Body>
         </Card>
-        <button onClick={this.openShiftForm}>Back</button>
+        <MDBBtn outline color="secondary" onClick={this.openShiftForm}>
+          Back <MDBIcon far icon="hand-peace"  className="ml-1" />
+        </MDBBtn>
       </div>
     )
   }
@@ -314,6 +327,7 @@ class NurseDash extends Component {
   render(){
     return (
       <Fragment>
+        <NavBar appointment={this.openAppointmentForm} alert={this.openAlertForm} shift={this.openShiftForm} shifted={this.hasOpenShift()}/>
         <Button onClick={this.handleLogout}>
         Logout<MDBIcon icon="user-lock" />
         </Button>
@@ -322,13 +336,7 @@ class NurseDash extends Component {
         this.state.appoinmentForm ? <div>{this.renderAppointmentForm()}</div> :
         this.state.shiftFrom ? this.renderShiftForm() :
         <div><p>Welcome {this.state.currentNurse.name}!</p>
-        {this.renderResidents()}
-        {this.renderJumbotron(this.openAlertForm, "Create Alert")}
-        {this.renderJumbotron(this.openShiftForm, "Initate Shift")}
-        {this.hasOpenShift() ? this.renderJumbotron(this.openAppointmentForm, "Schedule An Appointment")  : ''}
-        <div className="shift-card-container">
         <CardDeck> {this.showOpenShifts()}</CardDeck><br/>
-        </div>
         {this.hasOpenShift() ? this.RenderAgenda() : "Start a shift to see schedule"}
         </div>
         }

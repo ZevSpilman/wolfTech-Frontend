@@ -7,6 +7,7 @@
 
 
 /* body {
+border: 1px solid black;
    background-image: url(".ico");
    background-repeat: no-repeat;
    background-position: center;
@@ -49,26 +50,32 @@
 
 .shift {
   border: 1px solid black;
+
 }
 
 .resolved-alert{
-border: 3px solid black;
+  border: 1px solid black;
+
 }
 
 .unresolved-alert{
-  border: 3px solid red;
+  border: 1px solid black;
+
 }
 
 .shift {
+  border: 1px solid black;
   padding-left: 20px;
 }
 
 .alert-tile {
+  border: 1px solid black;
   /* width: 500px;
   height: 300px; */
 }
 
 .alert-div{
+  border: 1px solid black;
   padding-right: 1050px;
   padding-bottom: 800px;
   height: 10px;
@@ -76,6 +83,7 @@ border: 3px solid black;
 }
 
 .people-tile {
+  border: 1px solid black;
 
 
   padding-left: 100px;
@@ -84,25 +92,32 @@ border: 3px solid black;
 }
 
 .people-div{
+  border: 1px solid black;
   /* padding-left: 900px; */
 }
 
 .schedule{
-  border: 3px solid black;
+  border: 1px solid black;
+
   padding-left: 150px;
   padding-right: 150px;
+  width: 1900px;
+  height: 1000px;
 }
 
 .shift-card {
+  border: 1px solid black;
   height: 600px;
 }
 
 .shift-card-container {
+  border: 1px solid black;
 
 }
 
 .shift-logs {
-    border: 3px solid black;
+  border: 1px solid black;
+
     padding-left: 200px;
     padding-right: 400px;
     padding-top: 40px;
@@ -110,33 +125,58 @@ border: 3px solid black;
 }
 
 .sign-up {
+  border: 1px solid black;
   padding-top: 250px;
   background-color: navy;
-  border: 1px solid black;
+
 }
 
 .login-card{
-  width: 1000px;
   border: 1px solid black;
+  width: 1000px;
+
 }
 
 .signup-container{
+  border: 1px solid black;
     background-color: navy;
-    border: 1px solid black;
+
 }
 .jumbotron.jumbotron-fluid {
+  border: 1px solid black;
     background-color: pink;
     width: 1450px;
-    border: 1px solid black;
+
 }
 
 .dash-cards {
+  border: 1px solid black;
   padding-left: 0px;
-align-self: center;
-border: 1px solid black;
+ align-self: center;
 }
 
 .progressBars{
-  width: 200px;
   border: 1px solid black;
+  width: 200px;
+  overflow: hidden;
+  float: right;
+}
+
+.bar-graph{
+  float:left;
+  border: 1px solid orange;
+  width: 500px;
+}
+
+.all-charts{
+border: 1px solid yellow;
+overflow: hidden;
+height: 1100px;
+}
+
+.admin-cal{
+  border: 1px solid green;
+  height: 500px ;
+  width: 1400px;
+  padding-left: 500px;
 }
