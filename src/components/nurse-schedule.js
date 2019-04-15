@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactAgenda , ReactAgendaCtrl , guid } from 'react-agenda';
 
-require('moment/locale/fr.js');
+require('moment/locale/en-gb.js');
 
 var colors= {
   'color-1':"rgba(102, 195, 131 , 1)" ,
@@ -29,7 +29,6 @@ export default class Agenda extends React.Component {
   super(props);
     this.state = {
       items: [],
-
       selected:[],
       cellHeight:30,
       showModal:false,
@@ -40,25 +39,31 @@ export default class Agenda extends React.Component {
     }
   }
 
+
+
   componentDidMount(){
     let items = []
-   this.props.residents.forEach(resident =>{
-      resident.appointments.forEach(appoinment => {
-        items.push(
-          {
-            _id            :guid(),
-             name          : resident.name + ":" + " " + appoinment.variation,
-             startDateTime : parseISOString(appoinment.time),
-             endDateTime   : add_minutes(parseISOString(appoinment.time), appoinment.duration),
-             classes       : 'color-2 color-3'
-          }
-        )
-      })
-    })
-    this.setState({items: items})
+   // this.props.residents.forEach(resident =>{
+   //    resident.appointments.forEach(appoinment => {
+   //      items.push(
+   //        {
+   //          _id            :guid(),
+   //           name          : resident.name + ":" + " " + appoinment.variation,
+   //           startDateTime : parseISOString(appoinment.time),
+   //           endDateTime   : add_minutes(parseISOString(appoinment.time), appoinment.duration),
+   //           classes       : 'color-2 color-3'
+   //        }
+   //      )
+   //    })
+   //  })
+    this.setState({items: this.props.appointments})
   }
 
+
+
   render() {
+    console.log(this.props.appointments);
+    console.log(this.state.items);
     return (
       <div className="schedule">
         <ReactAgenda

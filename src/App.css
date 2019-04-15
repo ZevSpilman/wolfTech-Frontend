@@ -1,6 +1,9 @@
 
 @import '~react-agenda/build/styles.css';
 @import '~react-datetime/css/react-datetime.css';
+@import '~react-notifications/lib/notifications.css';
+
+
 
 
 /* body {
@@ -61,22 +64,27 @@ border: 3px solid black;
 }
 
 .alert-tile {
-  width: 500px;
-  height: 300px;
+  /* width: 500px;
+  height: 300px; */
 }
 
 .alert-div{
-  padding-right: 700px;
-  padding-bottom: 25px;
+  padding-right: 1050px;
+  padding-bottom: 800px;
+  height: 10px;
+  width: 1000px;
 }
 
 .people-tile {
-  width: 500px;
-  height: 300px;
+
+
+  padding-left: 100px;
+  /* width: 500px;
+  height: 300px; */
 }
 
 .people-div{
-  padding-left: 700px;
+  /* padding-left: 900px; */
 }
 
 .schedule{
@@ -95,8 +103,40 @@ border: 3px solid black;
 
 .shift-logs {
     border: 3px solid black;
-    padding-left: 400px;
+    padding-left: 200px;
     padding-right: 400px;
     padding-top: 40px;
     padding-bottom: 40px;
+}
+
+.sign-up {
+  padding-top: 250px;
+  background-color: navy;
+  border: 1px solid black;
+}
+
+.login-card{
+  width: 1000px;
+  border: 1px solid black;
+}
+
+.signup-container{
+    background-color: navy;
+    border: 1px solid black;
+}
+.jumbotron.jumbotron-fluid {
+    background-color: pink;
+    width: 1450px;
+    border: 1px solid black;
+}
+
+.dash-cards {
+  padding-left: 0px;
+align-self: center;
+border: 1px solid black;
+}
+
+.progressBars{
+  width: 200px;
+  border: 1px solid black;
 }

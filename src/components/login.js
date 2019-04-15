@@ -1,46 +1,28 @@
-import React, {Component} from 'react'
-import { connect } from 'react-redux';
-import { createBrowserHistory } from 'history';
-const history = createBrowserHistory();
+import React, {Fragment, Component} from 'react'
+import { Form, Button } from 'react-bootstrap'
+import SignUp from './new-user'
+import LoginForm from './login-form'
 
 class Login extends Component {
-
-  state = {
-    userInput: '',
-    passInput: ''
+  state={
+    login: false
   }
 
-  handleUserInput = (e) => {
-    this.setState({userInput: e.target.value})
+  flipLogin = () => {
+    this.setState({login: !this.state.login})
   }
 
-  handlePassInput = (e) => {
-    this.setState({passInput: e.target.value})
-  }
-
-  handleSubmit = () => {
-    localStorage.setItem('currentNurse', this.state.userInput);
-    window.location.replace("http://localhost:3001/nurse");
-
-  }
-
-  render(){
-    return(
-      <div>
-      <p>yo from login</p>
-        <input type="text" value={this.state.userInput} onChange={this.handleUserInput}/><br/>
-        <input type="text" value={this.state.passInput} onChange={this.handlePassInput}/><br/>
-        <input type="submit" onClick={(e) => this.handleSubmit()}/>
-      </div>
-    )
-  }
+	render(){
+		return (
+      <div className="signup-container">
+      {!this.state.login?
+        <LoginForm flipLogin={this.flipLogin}/>
+        :
+        <SignUp flipLogin={this.flipLogin}/>
+       }
+       </div>
+		)
+	}
 }
 
-function mapStateToProps(){
-  return {
-
-  }
-}
-
-
-export default connect(mapStateToProps)(Login)
+export default Login

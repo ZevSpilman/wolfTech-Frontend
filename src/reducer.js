@@ -1,4 +1,4 @@
-const initialState = {currentNurse: '', nurses: [], residents: [], appoinments: [], alerts: []}
+const initialState = {currentNurse: '', nurses: [], residents: [], appoinments: [], alerts: [], shifts: []}
 
 function reducer(state = initialState, action) {
   switch (action.type) {
@@ -12,9 +12,10 @@ function reducer(state = initialState, action) {
     return {...state, alerts: action.payload }
     case 'SET_CURRENT_USER':
     return {...state, currentNurse: action.payload}
+    case 'ADD_SHIFTS':
+    return {...state, shifts: action.payload}
     default:
     return state
-
   }
 }
 

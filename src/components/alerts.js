@@ -2,7 +2,7 @@ import React, {Fragment, Component} from 'react'
 import {connect} from 'react-redux'
 import { Link, Route } from 'react-router-dom'
 import { ActionCableConsumer } from 'react-actioncable-provider';
-
+import { MDBTable, MDBTableBody, MDBTableHead, MDBBtn } from 'mdbreact';
 
 class Alerts extends Component {
   state = {
@@ -16,10 +16,11 @@ class Alerts extends Component {
         <div className="shift">
           <h1>{this.state.alertClicked.nurse.name}</h1>
           <p>{this.state.alertClicked.message}</p>
-          {this.state.alertClicked.resolved ? <p>This issue has been resoved by: </p> :<button onClick={this.resolveAlert}>Resolve</button> }
+          {this.state.alertClicked.resolved ? <p>This issue has been resoved by: </p> :<MDBBtn onClick={this.resolveAlert}>Resolve</MDBBtn> }
+          <MDBBtn onClick={() => this.deleteAlert(this.state.alertClicked.id)}>Delete</MDBBtn>
         </div>
         <div>
-         <button onClick={this.handleAlertUnClick}>Back</button>
+         <MDBBtn onClick={this.handleAlertUnClick}>Back</MDBBtn>
         </div>
       </div>
     )
@@ -37,8 +38,19 @@ class Alerts extends Component {
       })
     })
     .then(r => r.json())
-    .then(console.log)
+    .then(this.alertColor())
   }
+
+  alertColor = (r) => {
+    let myAlert = this.state.allAlerts.find(alert => alert.id == this.state.alertClicked.id)
+    myAlert.resolved = true
+  }
+
+  optimisclyDeleteAlert = () => {
+    let newArray = this.state.allAlerts.filter(alert => alert.id !== this.state.alertClicked.id)
+    this.setState({allAlerts: newArray})
+  }
+
 
   handleAlertUnClick = () => {
     this.setState({alertClicked: ''})
@@ -49,11 +61,26 @@ class Alerts extends Component {
   }
 
   renderAlerts = () => {
+    let num = 1
     return this.state.allAlerts.map(alert => {
       return(
-         <p className={alert.resolved ? "resolved-alert" : "unresolved-alert"} onClick={() => this.handleAlertClick(alert)}>{alert.message}</p>
+         <tr onClick={() => this.handleAlertClick(alert)}>
+           <td>{num++}</td>
+           <td>{alert.message}</td>
+           <td>{alert.nurse.name}</td>
+           <td>{alert.resolved ? "Resolved" : "UnResolved"}</td>
+         </tr>
       )
     })
+  }
+
+  deleteAlert = (alertId) => {
+    fetch(`http://localhost:3000/api/v1/alerts/${alertId}`, {
+      method: "DELETE"
+      }
+    )
+    .then(this.optimisclyDeleteAlert())
+    .then(this.handleAlertUnClick())
   }
 
   render(){
@@ -62,6 +89,7 @@ class Alerts extends Component {
       <ActionCableConsumer
         channel={{ channel: 'AlertChannel' }}
         onReceived={alert => {
+          alert.nurse = this.props.nurses.find(nurse => nurse.id == alert.nurse_id)
           let newArray = [...this.state.allAlerts, alert]
           this.setState({allAlerts: newArray})
         }}/>
@@ -71,15 +99,29 @@ class Alerts extends Component {
         </button>
       </Link>
       <div>
-      {this.state.alertClicked=='' ? this.renderAlerts() : this.renderAlertInfo()}
+      {this.state.alertClicked=='' ?
+         <MDBTable hover className='shift'>
+         <MDBTableHead>
+          <tr>
+            <th>#</th>
+            <th>Message</th>
+            <th>Nurse</th>
+            <th>Status</th>
+          </tr>
+        </MDBTableHead>
+        <MDBTableBody>
+          {this.renderAlerts()}
+          </MDBTableBody>
+         </MDBTable>
+         : this.renderAlertInfo()}
       </div>
       </Fragment>
     )
   }
 }
 
-function mapStateToProps(){
-
+function mapStateToProps(state){
+  return {nurses: state.nurses}
 }
 
 export default connect(mapStateToProps)(Alerts)
