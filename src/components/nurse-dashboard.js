@@ -8,7 +8,7 @@ import {Card, CardDeck} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import Agenda from './nurse-schedule'
 import DateTimePicker from 'react-datetime-picker';
-import { MDBJumbotron, MDBContainer, MDBIcon, MDBBtn } from "mdbreact";
+import { MDBJumbotron, MDBContainer, MDBIcon, MDBBtn, MDBRow, MDBCol, MDBCard, MDBCardBody } from "mdbreact";
 import { ReactAgenda , ReactAgendaCtrl , guid } from 'react-agenda';
 import AlertForm from './alert-form'
 import NavBar from './nurse-nav'
@@ -125,28 +125,85 @@ class NurseDash extends Component {
   renderAppointmentForm = () => {
     let residents = this.state.currentNurse.shifts.find(shift => shift.time_out == null).unit.residents
     return (
-      <form >
-      <DropdownButton id="dropdown-item-button" title="Resident">
-        {residents.map(resident => {
-          return <Dropdown.Item
-            id={resident.id}
-            as="button"
-            onClick={(e)=>this.handleResidentInput(e)}>
-            {resident.name}
-          </Dropdown.Item>
-        })}
-      </DropdownButton>
-        <input placeholder={"type of oppointment"} type="text" value={this.state.appoinmentInputType} onChange={(e) => this.handleAppointmentInput(e, "type")}></input><br/><br/>
-        <DateTimePicker
-          onChange={this.setSelectedDate}
-          value={this.state.date}
-        />
-        <input type="number" placeholder={"duration in minutes"} onChange={this.handleDuration}></input>
-        <button onClick={(e) => this.handleSubmitAppointment(e)}> Submit appoinment</button><br/>
-        <MDBBtn outline color="secondary" onClick={this.openAppointmentForm}>
-          Back <MDBIcon far icon="hand-peace"  className="ml-1" />
-        </MDBBtn>
-      </form>
+      <MDBContainer>
+        <MDBRow>
+          <MDBCol md="6" >
+            <MDBCard >
+              <MDBCardBody >
+                <form >
+                  <p >Schedule Appointment</p>
+                  <label htmlFor="defaultFormRegisterEmailEx" className="grey-text">
+                    Choose A Date
+                  </label><br/>
+                  <DateTimePicker
+                      onChange={this.setSelectedDate}
+                      value={this.state.date}
+                    />
+                  <br /><br/>
+
+                  <label
+                    htmlFor="defaultFormRegisterConfirmEx"
+                    className="grey-text"
+                  >
+                  Type of Appointment
+                  </label>
+                  <input
+                    type="email"
+                    id="defaultFormRegisterConfirmEx"
+                    className="form-control"
+                    type="text"
+                    value={this.state.appoinmentInputType}
+                    onChange={(e) => this.handleAppointmentInput(e, "type")}
+                  />
+                  <br/>
+                  <label
+                    htmlFor="defaultFormRegisterConfirmEx"
+                    className="grey-text"
+                  >
+                  Duration In Minutes
+                  </label>
+                  <input
+                    type="email"
+                    id="defaultFormRegisterConfirmEx"
+                    className="form-control"
+                    type="number"
+                    onChange={this.handleDuration}
+                  />
+                  <br />
+
+                  <label
+                    htmlFor="defaultFormRegisterPasswordEx"
+                    className="grey-text"
+                  >
+                    Choose A Resident
+                  </label>
+                  <DropdownButton id="dropdown-item-button" title="Resident">
+                    {residents.map(resident => {
+                      return <Dropdown.Item
+                        id={resident.id}
+                        as="button"
+                        onClick={(e)=>this.handleResidentInput(e)}>
+                        {resident.name}
+                      </Dropdown.Item>
+                    })}
+                  </DropdownButton>
+                  <div className="text-center mt-4">
+                    <MDBBtn
+                      type="submit"
+                      onClick={(e) => this.handleSubmitAppointment(e)}
+                      >
+                      Schedule  <MDBIcon far icon="calendar-check" />
+                    </MDBBtn>
+                     <MDBBtn onClick={this.openAppointmentForm}>
+                     Back <MDBIcon icon="hand-peace" />
+                     </MDBBtn>
+                  </div>
+                </form>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
     )
   }
   handleDuration = (e) => {
@@ -204,28 +261,26 @@ class NurseDash extends Component {
       console.log(updatedArray);
       this.setState({currentNurse: {...this.state.currentNurse, shifts: updatedArray}})
     })
-  }
+  }///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   renderShiftForm = () => {
     return (
       <div>
-        <Card className="shift" bg="primary" text="white" style={{ width: '79rem'}}>
-          <Card.Body>
-            <Card.Title>Select A Zone and press enter to start a shift</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">Current time: {this.state.time}</Card.Subtitle>
-            <Card.Text>
-              <DropdownButton id="dropdown-item-button" title="Dropdown button">
-                <Dropdown.Item id="1" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit A</Dropdown.Item>
-                <Dropdown.Item id="2" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit B</Dropdown.Item>
-                <Dropdown.Item id="3" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit C</Dropdown.Item>
-                <Dropdown.Item id="4" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit D</Dropdown.Item>
-              </DropdownButton>
-            </Card.Text>
-            <button onClick={this.startShift}>Start Shift</button>
-          </Card.Body>
-        </Card>
-        <MDBBtn outline color="secondary" onClick={this.openShiftForm}>
-          Back <MDBIcon far icon="hand-peace"  className="ml-1" />
-        </MDBBtn>
+      <MDBCard>
+        <MDBCardBody className='shift-initiator'>
+              <h1>Select A Zone and press enter to start a shift</h1>
+              <h3 >Current time: {this.state.time}</h3>
+                <DropdownButton id="dropdown-item-button" title="UNIT SELECTION">
+                  <Dropdown.Item id="1" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit A</Dropdown.Item>
+                  <Dropdown.Item id="2" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit B</Dropdown.Item>
+                  <Dropdown.Item id="3" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit C</Dropdown.Item>
+                  <Dropdown.Item id="4" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit D</Dropdown.Item>
+                </DropdownButton>
+              <MDBBtn onClick={this.startShift}>Start Shift</MDBBtn>
+          <MDBBtn outline color="secondary" onClick={this.openShiftForm}>
+            Back <MDBIcon far icon="hand-peace"  className="ml-1" />
+          </MDBBtn>
+        </MDBCardBody>
+      </MDBCard>
       </div>
     )
   }
@@ -324,20 +379,26 @@ class NurseDash extends Component {
     return this.state.currentNurse.shifts && this.state.currentNurse.shifts.find(shift => shift.time_out == null)
   }
 
+  renderGif = () => {
+    return (
+      <div>
+      <h3>Start a shift to see schedule</h3>
+      <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/c8b32127075137.5635f930a8c2d.gif" alt="Smiley face"></img>
+      </div>
+    )
+  }
+
   render(){
     return (
       <Fragment>
-        <NavBar appointment={this.openAppointmentForm} alert={this.openAlertForm} shift={this.openShiftForm} shifted={this.hasOpenShift()}/>
-        <Button onClick={this.handleLogout}>
-        Logout<MDBIcon icon="user-lock" />
-        </Button>
+        <NavBar logOut={this.handleLogout} appointment={this.openAppointmentForm} alert={this.openAlertForm} shift={this.openShiftForm} shifted={this.hasOpenShift()}/>
         {
         this.state.alertFrom ? <AlertForm currentNurse={this.state.currentNurse.id} back={this.openAlertForm}/> :
-        this.state.appoinmentForm ? <div>{this.renderAppointmentForm()}</div> :
+        this.state.appoinmentForm ? <div className="appoinment-container">{this.renderAppointmentForm()}</div> :
         this.state.shiftFrom ? this.renderShiftForm() :
-        <div><p>Welcome {this.state.currentNurse.name}!</p>
+        <div className="nurse-dash-components"><p>Welcome {this.state.currentNurse.name}!</p>
         <CardDeck> {this.showOpenShifts()}</CardDeck><br/>
-        {this.hasOpenShift() ? this.RenderAgenda() : "Start a shift to see schedule"}
+        {this.hasOpenShift() ? this.RenderAgenda() : this.renderGif()}
         </div>
         }
       </Fragment>
@@ -348,6 +409,5 @@ class NurseDash extends Component {
 function mapStateToProps(state) {
   return {nurses: state.nurses}
 }
-
 
 export default connect(mapStateToProps)(NurseDash)

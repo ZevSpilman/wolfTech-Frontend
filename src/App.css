@@ -48,10 +48,6 @@ border: 1px solid black;
   }
 }
 
-.shift {
-  border: 1px solid black;
-
-}
 
 .resolved-alert{
   border: 1px solid black;
@@ -65,7 +61,24 @@ border: 1px solid black;
 
 .shift {
   border: 1px solid black;
-  padding-left: 20px;
+}
+
+.nurse-dash-components{
+
+}
+
+.shift-card-container {
+  padding-left: 1600px;
+  height: 0px;
+}
+
+.schedule{
+
+  padding-left: 150px;
+  padding-right: 150px;
+  width: 1600px;
+  height: 1000px;
+
 }
 
 .alert-tile {
@@ -96,27 +109,15 @@ border: 1px solid black;
   /* padding-left: 900px; */
 }
 
-.schedule{
-  border: 1px solid black;
-
-  padding-left: 150px;
-  padding-right: 150px;
-  width: 1900px;
-  height: 1000px;
-}
 
 .shift-card {
-  border: 1px solid black;
+  border: 1px solid pink;
   height: 600px;
 }
 
-.shift-card-container {
-  border: 1px solid black;
-
-}
 
 .shift-logs {
-  border: 1px solid black;
+  border: 1px solid pink;
 
     padding-left: 200px;
     padding-right: 400px;
@@ -156,27 +157,41 @@ border: 1px solid black;
 }
 
 .progressBars{
-  border: 1px solid black;
   width: 200px;
-  overflow: hidden;
-  float: right;
+  float: left;
 }
 
 .bar-graph{
   float:left;
-  border: 1px solid orange;
-  width: 500px;
+  width: 1px;
 }
 
 .all-charts{
-border: 1px solid yellow;
+border: 1px solid black;
 overflow: hidden;
-height: 1100px;
+height: 506px;
 }
 
 .admin-cal{
-  border: 1px solid green;
+  float: left;
   height: 500px ;
-  width: 1400px;
+  width: 1670px;
   padding-left: 500px;
+}
+
+.appoinment-container{
+  padding-left: 600px;
+}
+
+.nav-bar{
+  padding-left: 400px;
+  width: 1120px;
+  height: 600px;
+}
+
+.alert-card {
+}
+
+.shift-initiator {
+    width: 1850px;
 }

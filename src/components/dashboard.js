@@ -101,7 +101,7 @@ class Dashboard extends Component {
           this.setState({alert: alert.message})
         }}
       />
-      <NavBar alerts={this.state.numOfAlerts}/>
+      <NavBar logOut={this.handleLogout} alerts={this.state.numOfAlerts}/>
       <h1>Good Morning</h1>
       {this.state.alert? <Notification alert={this.state.alert} cancelAlert={this.cancelAlert}/>:''}
       <div className='all-charts'>
@@ -126,14 +126,7 @@ class Dashboard extends Component {
             />
           </div>
         </div>
-
-
-
         <TimeAgo date="April 2, 2019" />
-        <Button onClick={this.handleLogout}>
-        Logout
-        </Button>
-
       </Fragment>
     )
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBNav, MDBContainer, MDBBtn, MDBRow, MDBCol } from "mdbreact";
+import { MDBNav, MDBContainer, MDBBtn, MDBRow, MDBCol, MDBIcon } from "mdbreact";
 
 const NavBar =  (props) => (
     <MDBContainer>
@@ -9,6 +9,9 @@ const NavBar =  (props) => (
             <MDBBtn onClick={props.alert}>Create Alert</MDBBtn>
             <MDBBtn onClick={props.shift}>Initiate Shift</MDBBtn>
             {props.shifted?<MDBBtn onClick={props.appointment}>Schedule Appointment</MDBBtn>:''}
+            <MDBBtn onClick={props.logOut}>
+              Logout<MDBIcon icon="user-lock" />
+            </MDBBtn>
           </MDBNav>
         </MDBCol>
       </MDBRow>
