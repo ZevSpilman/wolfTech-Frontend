@@ -1,9 +1,11 @@
 import React, {Component} from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput, MDBCard, MDBCardBody } from 'mdbreact';
+import Notification from './notification'
 
 class AlertForm extends Component {
   state = {
-    alertInput: ''
+    alertInput: '',
+    alert: false
   }
 
 
@@ -23,54 +25,44 @@ class AlertForm extends Component {
      })
     })
     .then(r => r.json())
-    .then(console.log)
+    .then(r => this.setState({alert: true}))
   }
 
   handleAlertForm = (e) => {
     this.setState({alertInput: e.target.value})
   }
 
+  cancelAlert = () => {
+    this.setState({alert: null})
+  }
+
   render(){
     return (
       <MDBContainer>
-        <MDBRow>
+        {this.state.alert? <button className='btn btn-success' onClick={this.cancelAlert}>Message Sent</button>:''}
+        <MDBRow  className="nav-bar">
           <MDBCol md="6">
-            <form>
-              <p className="h5 text-center mb-4">Write to us</p>
-              <div className="grey-text">
-                <MDBInput
-                  label="Your name"
-                  icon="user"
-                  group
-                  type="text"
-                  validate
-                  error="wrong"
-                  success="right"
-                />
-                <MDBInput
-                  label="Subject"
-                  icon="tag"
-                  group
-                  type="text"
-                  validate
-                  error="wrong"
-                  success="right"
-                />
-                <MDBInput
-                  type="textarea"
-                  rows="2"
-                  label="Your message"
-                  icon="pencil-alt"
-                  value={this.state.alertInput}
-                  onChange={this.handleAlertForm}
-                />
-              </div>
-              <div className="text-center">
-                <MDBBtn outline color="secondary" onClick={(e) => this.handleSubmitAlert(e)}>
-                  Send <MDBIcon far icon="paper-plane" className="ml-1" />
-                </MDBBtn>
-              </div>
-            </form>
+          <MDBCard className='appointment-scheduler'>
+            <MDBCardBody className='alert-card'>
+              <form>
+                <p className="h5 text-center mb-4">Alert Form</p><MDBIcon icon="pencil-alt"  />
+                <div className="grey-text">
+                  <MDBInput
+                    type="textarea"
+                    rows="2"
+                    label="Your message"
+                    value={this.state.alertInput}
+                    onChange={this.handleAlertForm}
+                  />
+                </div>
+                <div className="text-center">
+                  <MDBBtn outline color="secondary" onClick={(e) => this.handleSubmitAlert(e)}>
+                    Send <MDBIcon far icon="paper-plane" className="ml-1" />
+                  </MDBBtn>
+                </div>
+              </form>
+            </MDBCardBody>
+          </MDBCard>
           </MDBCol>
         </MDBRow>
         <MDBBtn outline color="secondary" onClick={this.props.back}>

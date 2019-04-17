@@ -3,14 +3,19 @@ import {connect} from 'react-redux';
 import {Button} from 'react-bootstrap'
 import { ActionCableConsumer } from 'react-actioncable-provider';
 import Notification from './notification'
-import { createBrowserHistory } from 'history';
 import NavBar from './nav-bar'
 import CircularProgressbar from 'react-circular-progressbar';
 import TimeAgo from 'react-timeago'
+import Chart from './bar-chart'
+import MyCalendar from './admin-cal'
 
 
 
-const history = createBrowserHistory();
+
+function parseISOString(s) {
+  var b = s.split(/\D+/);
+  return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
+}
 
 class Dashboard extends Component {
   state = {
@@ -56,6 +61,9 @@ class Dashboard extends Component {
     if (this.props.nurses.length != [] && this.props.shifts[0]){
       return this.getBusyNurses().length / this.props.nurses.length * 100
     }
+    else{
+      return 0
+    }
   }
 
   getBedCount = () => {
@@ -64,41 +72,65 @@ class Dashboard extends Component {
     }
   }
 
+  getMonthData = () => {
+    if (this.props.residents[0]){
+      let feb = 0
+      let march = 0
+      let april = 0
+      let arrOfDates = this.props.residents.map(resident => parseISOString(resident.created_at))
+      arrOfDates.forEach(date => {
+        if (date.getMonth() == 1){
+          feb += 1
+        }
+        else if (date.getMonth() == 2) {
+          march += 1
+        }
+        else if (date.getMonth() == 3) {
+          april += 1
+        }
+      })
+      return [{text: 'Feb', value: feb}, {text: "March", value: march}, {text: "April", value: april}]
+    }
+  }
+
 
   render() {
     return (
       <Fragment>
-      <NavBar alerts={this.state.numOfAlerts}/>
-        <ActionCableConsumer
-          channel={{ channel: 'AlertChannel' }}
-          onReceived={alert => {
-            console.log(alert);
-            let newNum = this.state.numOfAlerts + 1
-            this.setState({numOfAlerts: newNum})
-            this.setState({alert: alert.message})
-          }}
-        />
-{this.state.alert? <Notification alert={this.state.alert} cancelAlert={this.cancelAlert}/>:''}
-        <div className="progressBars">
-        <p>Nurses Working </p>
-          <CircularProgressbar
-            percentage={Math.round(this.getPercentage())}
-            text={`${Math.round(this.getPercentage())}%`}
-          />
-          <br/>
-          <br/>
-          <p>Beds full</p>
-          <CircularProgressbar
-            percentage={Math.round(this.getBedCount())}
-            text={`${Math.round(this.getBedCount())}%`}
-          />
+      <ActionCableConsumer
+        channel={{ channel: 'AlertChannel' }}
+        onReceived={alert => {
+          console.log(alert);
+          let newNum = this.state.numOfAlerts + 1
+          this.setState({numOfAlerts: newNum})
+          this.setState({alert: alert.message})
+        }}
+      />
+      <NavBar logOut={this.handleLogout} alerts={this.state.numOfAlerts}/>
+      <h1>Good Morning</h1>
+      {this.state.alert? <Notification alert={this.state.alert} cancelAlert={this.cancelAlert}/>:''}
+      <div className='all-charts'>
+        <div className='bar-graph'>
+        {/*being that this is a fetch it laggs*/}
+        <Chart months={this.getMonthData()}/>
+        </div>
+          <MyCalendar />
+          <div className="progressBars">
+          <p>Nurses Working </p>
+            <CircularProgressbar
+              percentage={Math.round(this.getPercentage())}
+              text={`${Math.round(this.getPercentage())}%`}
+            />
+            <br/>
+            <br/>
+            <p>Beds full</p>
+            <CircularProgressbar
+              percentage={Math.round(this.getBedCount())}
+              text={`${Math.round(this.getBedCount())}%`}
+            />
+          </div>
         </div>
         <TimeAgo date="April 2, 2019" />
-        <h1>Good Morning</h1>
-
-        <Button onClick={this.handleLogout}>
-        Logout
-        </Button>
       </Fragment>
     )
   }

@@ -7,6 +7,7 @@
 
 
 /* body {
+border: 1px solid black;
    background-image: url(".ico");
    background-repeat: no-repeat;
    background-position: center;
@@ -47,28 +48,47 @@
   }
 }
 
+
+.resolved-alert{
+  border: 1px solid black;
+
+}
+
+.unresolved-alert{
+  border: 1px solid black;
+
+}
+
 .shift {
   border: 1px solid black;
 }
 
-.resolved-alert{
-border: 3px solid black;
+.nurse-dash-components{
+
 }
 
-.unresolved-alert{
-  border: 3px solid red;
+.shift-card-container {
+  padding-left: 1600px;
+  height: 0px;
 }
 
-.shift {
-  padding-left: 20px;
+.schedule{
+
+  padding-left: 150px;
+  padding-right: 150px;
+  width: 1600px;
+  height: 1000px;
+
 }
 
 .alert-tile {
+  border: 1px solid black;
   /* width: 500px;
   height: 300px; */
 }
 
 .alert-div{
+  border: 1px solid black;
   padding-right: 1050px;
   padding-bottom: 800px;
   height: 10px;
@@ -76,6 +96,7 @@ border: 3px solid black;
 }
 
 .people-tile {
+  border: 1px solid black;
 
 
   padding-left: 100px;
@@ -84,25 +105,20 @@ border: 3px solid black;
 }
 
 .people-div{
+  border: 1px solid black;
   /* padding-left: 900px; */
 }
 
-.schedule{
-  border: 3px solid black;
-  padding-left: 150px;
-  padding-right: 150px;
-}
 
 .shift-card {
+  border: 1px solid pink;
   height: 600px;
 }
 
-.shift-card-container {
-
-}
 
 .shift-logs {
-    border: 3px solid black;
+  border: 1px solid pink;
+
     padding-left: 200px;
     padding-right: 400px;
     padding-top: 40px;
@@ -110,33 +126,68 @@ border: 3px solid black;
 }
 
 .sign-up {
+  border: 1px solid black;
   padding-top: 250px;
   background-color: navy;
-  border: 1px solid black;
+  height: 1500px;
 }
 
 .login-card{
-  width: 1000px;
   border: 1px solid black;
+  width: 1000px;
 }
 
 .signup-container{
-    background-color: navy;
-    border: 1px solid black;
-}
-.jumbotron.jumbotron-fluid {
-    background-color: pink;
-    width: 1450px;
-    border: 1px solid black;
+  border: 1px solid black;
+  background-color: navy;
+  height: 1500px;
 }
 
 .dash-cards {
+  border: 1px solid black;
   padding-left: 0px;
-align-self: center;
-border: 1px solid black;
+ align-self: center;
 }
 
 .progressBars{
   width: 200px;
-  border: 1px solid black;
+  float: left;
+}
+
+.bar-graph{
+  float:left;
+  width: 1px;
+}
+
+.all-charts{
+border: 1px solid black;
+overflow: hidden;
+height: 506px;
+}
+
+.admin-cal{
+  float: left;
+  height: 500px ;
+  width: 1670px;
+  padding-left: 500px;
+}
+
+.appoinment-container{
+  padding-left: 600px;
+}
+
+.nav-bar{
+  padding-left: 400px;
+  width: 1120px;
+  height: 600px;
+}
+
+.alert-card {
+}
+
+.shift-start-container{
+  padding-left: 600px;
+}
+.nurse-dash{
+    background-color: navy;
 }

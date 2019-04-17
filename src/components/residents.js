@@ -48,7 +48,7 @@ class Residents extends Component {
               Age: {resident.age}<br/>
               Unit: {resident.unit.name}
             </Card.Text>
-            <Button variant="primary" onClick={() => this.setResident(resident.id)}>Go somewhere</Button>
+            <Button variant="primary" onClick={() => this.setResident(resident.id)}>INFO</Button>
           </Card.Body>
         </Card>
         </div>

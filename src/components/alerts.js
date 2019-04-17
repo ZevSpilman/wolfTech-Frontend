@@ -7,7 +7,7 @@ import { MDBTable, MDBTableBody, MDBTableHead, MDBBtn } from 'mdbreact';
 class Alerts extends Component {
   state = {
     alertClicked: '',
-    allAlerts: this.props.allAlerts
+    allAlerts: this.props.allAlerts.reverse()
   }
 
   renderAlertInfo = () => {
@@ -90,7 +90,7 @@ class Alerts extends Component {
         channel={{ channel: 'AlertChannel' }}
         onReceived={alert => {
           alert.nurse = this.props.nurses.find(nurse => nurse.id == alert.nurse_id)
-          let newArray = [...this.state.allAlerts, alert]
+          let newArray = [alert, ...this.state.allAlerts]
           this.setState({allAlerts: newArray})
         }}/>
       <Link to="/admin/dashboard">

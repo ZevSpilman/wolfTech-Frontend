@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 
 
 class Notification extends React.Component {
-  createNotification = (type ) => {
+  createNotification = (type) => {
 
     return () => {
       switch (type) {
