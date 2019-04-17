@@ -38,7 +38,8 @@ class NurseDash extends Component {
     date: new Date(),
     appointmentDuration: 0,
     firstTime: true,
-    newAppointment: []
+    newAppointment: [],
+    alert: null
   }
 
   componentDidMount(){
@@ -206,6 +207,7 @@ class NurseDash extends Component {
       </MDBContainer>
     )
   }
+
   handleDuration = (e) => {
     this.setState({appointmentDuration: e.target.value})
   }
@@ -214,35 +216,40 @@ class NurseDash extends Component {
     this.setState({appoinmentForm: false, alertFrom: false, shiftFrom: !this.state.shiftFrom})
   }
   startShift = () => {
-    if (this.state.selected_unit_id){
-        fetch(`http://localhost:3000/api/v1/shifts`, {
-        method: 'POST',
-        headers: {
-          "Content-Type" : 'application/json',
-          Accept: "application/json"
-        },
-        body: JSON.stringify({
-          nurse_id: this.state.currentNurse.id,
-          time_in: this.state.time,
-          unit_id: this.state.selected_unit_id
-        })
-      })
-      .then(r => r.json())
-      .then( r => {
-          this.setState({shiftFrom: false})
-          let updatedArray = this.state.currentNurse.shifts
-          updatedArray.push(r)
-          debugger
-          this.setState({currentNurse: {...this.state.currentNurse, shifts: updatedArray}})
-          this.showOpenShifts()
-
-        }
-      )
+    if (this.showOpenShifts()[0]){
+      //in the future maybe we will just take this button out of the navbar when there is a shift open but for now...
+      window.alert("You Currently Have an Open shift!")
     }
-      else
-      {
-        window.alert("Please pick a Unit")
+    else{
+      if (this.state.selected_unit_id){
+          fetch(`http://localhost:3000/api/v1/shifts`, {
+          method: 'POST',
+          headers: {
+            "Content-Type" : 'application/json',
+            Accept: "application/json"
+          },
+          body: JSON.stringify({
+            nurse_id: this.state.currentNurse.id,
+            time_in: this.state.time,
+            unit_id: this.state.selected_unit_id
+          })
+        })
+        .then(r => r.json())
+        .then( r => {
+            this.setState({shiftFrom: false})
+            let updatedArray = this.state.currentNurse.shifts
+            updatedArray.push(r)
+            this.setState({currentNurse: {...this.state.currentNurse, shifts: updatedArray}})
+            this.showOpenShifts()
+
+          }
+        )
       }
+        else
+        {
+          window.alert("Please pick a Unit")
+        }
+    }
   }
   endShift = (shift) => {
     fetch(`http://localhost:3000/api/v1/shifts/${shift}`, {
@@ -261,27 +268,32 @@ class NurseDash extends Component {
       console.log(updatedArray);
       this.setState({currentNurse: {...this.state.currentNurse, shifts: updatedArray}})
     })
-  }///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  }
+
   renderShiftForm = () => {
     return (
-      <div>
-      <MDBCard>
-        <MDBCardBody className='shift-initiator'>
-              <h1>Select A Zone and press enter to start a shift</h1>
-              <h3 >Current time: {this.state.time}</h3>
+      <MDBContainer>
+        <MDBRow>
+          <MDBCol md="6" >
+            <MDBCard>
+              <MDBCardBody>
+                <h1>Select A Zone and press enter to start a shift</h1>
+                <h3 >Current time: {this.state.time}</h3>
                 <DropdownButton id="dropdown-item-button" title="UNIT SELECTION">
                   <Dropdown.Item id="1" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit A</Dropdown.Item>
                   <Dropdown.Item id="2" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit B</Dropdown.Item>
                   <Dropdown.Item id="3" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit C</Dropdown.Item>
                   <Dropdown.Item id="4" as="button" onClick={(e)=>this.handleUnitSelection(e.target.id)}>Unit D</Dropdown.Item>
                 </DropdownButton>
-              <MDBBtn onClick={this.startShift}>Start Shift</MDBBtn>
-          <MDBBtn outline color="secondary" onClick={this.openShiftForm}>
-            Back <MDBIcon far icon="hand-peace"  className="ml-1" />
-          </MDBBtn>
-        </MDBCardBody>
-      </MDBCard>
-      </div>
+                <MDBBtn onClick={this.startShift}>Start Shift</MDBBtn>
+                <MDBBtn outline color="secondary" onClick={this.openShiftForm}>
+                  Back <MDBIcon far icon="hand-peace"  className="ml-1" />
+                </MDBBtn>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
+        </MDBRow>
+      </MDBContainer>
     )
   }
   handleUnitSelection = (e) => {
@@ -289,10 +301,11 @@ class NurseDash extends Component {
     console.log(this.state.selected_unit_id);
   }
   showOpenShifts = () => {
+    let arr = []
     if (this.state.currentNurse.shifts){
-      return this.state.currentNurse.shifts.map(shift => {
+       this.state.currentNurse.shifts.map(shift => {
         if (!shift.time_out){
-          return (
+          arr.push(
             <div className='shift-card-container'>
               <Card className="shift-card" style={{ width: '18rem' }}>
                 <Card.Img variant="top" src="https://loading.io/spinners/typing/lg.-text-entering-comment-loader.gif" />
@@ -310,6 +323,7 @@ class NurseDash extends Component {
         }
       })
     }
+    return arr
   }
   currentAppoinments = () => {
     let items = []
@@ -365,15 +379,6 @@ class NurseDash extends Component {
     localStorage.setItem('currentNurse', null);
     window.location.replace("http://localhost:3001/");
   }
-  renderJumbotron = (callBack, text) => {
-    return(
-      <MDBJumbotron fluid>
-       <MDBContainer onClick={callBack}>
-         <h2 className="display-4">{text} </h2>
-         <p className="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-       </MDBContainer>
-      </MDBJumbotron>)
-  }
 
   hasOpenShift = () =>{
     return this.state.currentNurse.shifts && this.state.currentNurse.shifts.find(shift => shift.time_out == null)
@@ -382,7 +387,7 @@ class NurseDash extends Component {
   renderGif = () => {
     return (
       <div>
-      <h3>Start a shift to see schedule</h3>
+      <h3>Start a shift to see schedule!</h3>
       <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/c8b32127075137.5635f930a8c2d.gif" alt="Smiley face"></img>
       </div>
     )
@@ -390,13 +395,14 @@ class NurseDash extends Component {
 
   render(){
     return (
-      <Fragment>
+      <Fragment className='nurse-dash'>
+        
         <NavBar logOut={this.handleLogout} appointment={this.openAppointmentForm} alert={this.openAlertForm} shift={this.openShiftForm} shifted={this.hasOpenShift()}/>
         {
         this.state.alertFrom ? <AlertForm currentNurse={this.state.currentNurse.id} back={this.openAlertForm}/> :
         this.state.appoinmentForm ? <div className="appoinment-container">{this.renderAppointmentForm()}</div> :
-        this.state.shiftFrom ? this.renderShiftForm() :
-        <div className="nurse-dash-components"><p>Welcome {this.state.currentNurse.name}!</p>
+        this.state.shiftFrom ? <div className="appoinment-container">{this.renderShiftForm()} </div>:
+        <div className="nurse-dash-components"><h3>Welcome {this.state.currentNurse.name}!</h3>
         <CardDeck> {this.showOpenShifts()}</CardDeck><br/>
         {this.hasOpenShift() ? this.RenderAgenda() : this.renderGif()}
         </div>
@@ -407,7 +413,7 @@ class NurseDash extends Component {
 }
 
 function mapStateToProps(state) {
-  return {nurses: state.nurses}
+  return {nurses: state.nurses, residents: state.residents}
 }
 
 export default connect(mapStateToProps)(NurseDash)

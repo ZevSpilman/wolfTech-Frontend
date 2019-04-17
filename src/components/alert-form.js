@@ -1,9 +1,11 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput, MDBCard, MDBCardBody } from 'mdbreact';
+import Notification from './notification'
 
 class AlertForm extends Component {
   state = {
-    alertInput: ''
+    alertInput: '',
+    alert: false
   }
 
 
@@ -23,16 +25,21 @@ class AlertForm extends Component {
      })
     })
     .then(r => r.json())
-    .then(console.log)
+    .then(r => this.setState({alert: true}))
   }
 
   handleAlertForm = (e) => {
     this.setState({alertInput: e.target.value})
   }
 
+  cancelAlert = () => {
+    this.setState({alert: null})
+  }
+
   render(){
     return (
       <MDBContainer>
+        {this.state.alert? <button className='btn btn-success' onClick={this.cancelAlert}>Message Sent</button>:''}
         <MDBRow  className="nav-bar">
           <MDBCol md="6">
           <MDBCard className='appointment-scheduler'>

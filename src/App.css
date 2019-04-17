@@ -129,25 +129,18 @@ border: 1px solid black;
   border: 1px solid black;
   padding-top: 250px;
   background-color: navy;
-
+  height: 1500px;
 }
 
 .login-card{
   border: 1px solid black;
   width: 1000px;
-
 }
 
 .signup-container{
   border: 1px solid black;
-    background-color: navy;
-
-}
-.jumbotron.jumbotron-fluid {
-  border: 1px solid black;
-    background-color: pink;
-    width: 1450px;
-
+  background-color: navy;
+  height: 1500px;
 }
 
 .dash-cards {
@@ -192,6 +185,9 @@ height: 506px;
 .alert-card {
 }
 
-.shift-initiator {
-    width: 1850px;
+.shift-start-container{
+  padding-left: 600px;
+}
+.nurse-dash{
+    background-color: navy;
 }

@@ -13,9 +13,9 @@ class Chart extends Component{
 
 
   componentDidMount(){
-    window.onresize = () => {
-     this.setState({width: this.refs.root.offsetWidth});
-    };
+      window.onresize = () => {
+       this.setState({width: this.refs.root.offsetWidth});
+    }
   }
 
   handleBarClick(element, id){

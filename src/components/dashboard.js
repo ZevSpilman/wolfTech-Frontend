@@ -61,6 +61,9 @@ class Dashboard extends Component {
     if (this.props.nurses.length != [] && this.props.shifts[0]){
       return this.getBusyNurses().length / this.props.nurses.length * 100
     }
+    else{
+      return 0
+    }
   }
 
   getBedCount = () => {
@@ -70,22 +73,24 @@ class Dashboard extends Component {
   }
 
   getMonthData = () => {
-    let feb = 0
-    let march = 0
-    let april = 0
-    let arrOfDates = this.props.residents.map(resident => parseISOString(resident.created_at))
-    arrOfDates.forEach(date => {
-      if (date.getMonth() == 1){
-        feb += 1
-      }
-      else if (date.getMonth() == 2) {
-        march += 1
-      }
-      else if (date.getMonth() == 3) {
-        april += 1
-      }
-    })
-    return [{text: 'Feb', value: feb}, {text: "March", value: march}, {text: "April", value: april}]
+    if (this.props.residents[0]){
+      let feb = 0
+      let march = 0
+      let april = 0
+      let arrOfDates = this.props.residents.map(resident => parseISOString(resident.created_at))
+      arrOfDates.forEach(date => {
+        if (date.getMonth() == 1){
+          feb += 1
+        }
+        else if (date.getMonth() == 2) {
+          march += 1
+        }
+        else if (date.getMonth() == 3) {
+          april += 1
+        }
+      })
+      return [{text: 'Feb', value: feb}, {text: "March", value: march}, {text: "April", value: april}]
+    }
   }
 
 
@@ -106,11 +111,10 @@ class Dashboard extends Component {
       {this.state.alert? <Notification alert={this.state.alert} cancelAlert={this.cancelAlert}/>:''}
       <div className='all-charts'>
         <div className='bar-graph'>
+        {/*being that this is a fetch it laggs*/}
         <Chart months={this.getMonthData()}/>
         </div>
-          <div>
-            <MyCalendar />
-            </div>
+          <MyCalendar />
           <div className="progressBars">
           <p>Nurses Working </p>
             <CircularProgressbar
