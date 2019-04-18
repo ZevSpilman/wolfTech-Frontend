@@ -353,9 +353,9 @@ class NurseDash extends Component {
   RenderAgenda = () => {
     if (this.state.firstTime){
       return (
-        <Agenda
-         appointments={this.currentAppoinments()}
-         />
+            <Agenda
+             appointments={this.currentAppoinments()}
+             />
        )
     }
     else{
@@ -395,8 +395,7 @@ class NurseDash extends Component {
 
   render(){
     return (
-      <Fragment className='nurse-dash'>
-        
+      <div className='nurse-dash'>
         <NavBar logOut={this.handleLogout} appointment={this.openAppointmentForm} alert={this.openAlertForm} shift={this.openShiftForm} shifted={this.hasOpenShift()}/>
         {
         this.state.alertFrom ? <AlertForm currentNurse={this.state.currentNurse.id} back={this.openAlertForm}/> :
@@ -407,7 +406,7 @@ class NurseDash extends Component {
         {this.hasOpenShift() ? this.RenderAgenda() : this.renderGif()}
         </div>
         }
-      </Fragment>
+      </div>
     )
   }
 }

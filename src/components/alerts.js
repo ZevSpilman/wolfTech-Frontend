@@ -7,7 +7,7 @@ import { MDBTable, MDBTableBody, MDBTableHead, MDBBtn } from 'mdbreact';
 class Alerts extends Component {
   state = {
     alertClicked: '',
-    allAlerts: this.props.allAlerts.reverse()
+    allAlerts: this.props.allAlerts
   }
 
   renderAlertInfo = () => {
@@ -41,10 +41,6 @@ class Alerts extends Component {
     .then(this.alertColor())
   }
 
-  alertColor = (r) => {
-    let myAlert = this.state.allAlerts.find(alert => alert.id == this.state.alertClicked.id)
-    myAlert.resolved = true
-  }
 
   optimisclyDeleteAlert = () => {
     let newArray = this.state.allAlerts.filter(alert => alert.id !== this.state.alertClicked.id)
@@ -62,12 +58,13 @@ class Alerts extends Component {
 
   renderAlerts = () => {
     let num = 1
-    return this.state.allAlerts.map(alert => {
+    return this.state.allAlerts.sort((a,b) => b.id - a.id).map(alert => {
+      console.log(alert.nurse);
       return(
          <tr onClick={() => this.handleAlertClick(alert)}>
            <td>{num++}</td>
            <td>{alert.message}</td>
-           <td>{alert.nurse.name}</td>
+           <td>{alert.nurse.name?alert.nurse.name:"smtn is wrong"}</td>
            <td>{alert.resolved ? "Resolved" : "UnResolved"}</td>
          </tr>
       )
@@ -85,7 +82,7 @@ class Alerts extends Component {
 
   render(){
     return (
-      <Fragment>
+      <div className='alert-page'>
       <ActionCableConsumer
         channel={{ channel: 'AlertChannel' }}
         onReceived={alert => {
@@ -94,9 +91,9 @@ class Alerts extends Component {
           this.setState({allAlerts: newArray})
         }}/>
       <Link to="/admin/dashboard">
-        <button>
+        <MDBBtn>
          Home
-        </button>
+        </MDBBtn>
       </Link>
       <div>
       {this.state.alertClicked=='' ?
@@ -115,7 +112,7 @@ class Alerts extends Component {
          </MDBTable>
          : this.renderAlertInfo()}
       </div>
-      </Fragment>
+      </div>
     )
   }
 }

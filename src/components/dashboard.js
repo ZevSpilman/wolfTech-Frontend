@@ -8,6 +8,7 @@ import CircularProgressbar from 'react-circular-progressbar';
 import TimeAgo from 'react-timeago'
 import Chart from './bar-chart'
 import MyCalendar from './admin-cal'
+import {MDBCard, MDBCardBody } from "mdbreact";
 
 
 
@@ -72,31 +73,31 @@ class Dashboard extends Component {
     }
   }
 
-  getMonthData = () => {
-    if (this.props.residents[0]){
-      let feb = 0
-      let march = 0
-      let april = 0
-      let arrOfDates = this.props.residents.map(resident => parseISOString(resident.created_at))
-      arrOfDates.forEach(date => {
-        if (date.getMonth() == 1){
-          feb += 1
-        }
-        else if (date.getMonth() == 2) {
-          march += 1
-        }
-        else if (date.getMonth() == 3) {
-          april += 1
-        }
-      })
-      return [{text: 'Feb', value: feb}, {text: "March", value: march}, {text: "April", value: april}]
-    }
-  }
+  // getMonthData = () => {
+  //   if (this.props.residents[0]){
+  //     let feb = 0
+  //     let march = 0
+  //     let april = 0
+  //     let arrOfDates = this.props.residents.map(resident => parseISOString(resident.created_at))
+  //     arrOfDates.forEach(date => {
+  //       if (date.getMonth() == 1){
+  //         feb += 1
+  //       }
+  //       else if (date.getMonth() == 2) {
+  //         march += 1
+  //       }
+  //       else if (date.getMonth() == 3) {
+  //         april += 1
+  //       }
+  //     })
+  //     return [{text: 'Feb', value: feb}, {text: "March", value: march}, {text: "April", value: april}]
+  //   }
+  // }
 
 
   render() {
     return (
-      <Fragment>
+      <div className='dash'>
       <ActionCableConsumer
         channel={{ channel: 'AlertChannel' }}
         onReceived={alert => {
@@ -109,10 +110,11 @@ class Dashboard extends Component {
       <NavBar logOut={this.handleLogout} alerts={this.state.numOfAlerts}/>
       <h1>Good Morning</h1>
       {this.state.alert? <Notification alert={this.state.alert} cancelAlert={this.cancelAlert}/>:''}
+      <MDBCard>
+        <MDBCardBody>
       <div className='all-charts'>
         <div className='bar-graph'>
-        {/*being that this is a fetch it laggs*/}
-        <Chart months={this.getMonthData()}/>
+        <Chart/>
         </div>
           <MyCalendar />
           <div className="progressBars">
@@ -130,8 +132,10 @@ class Dashboard extends Component {
             />
           </div>
         </div>
+          </MDBCardBody >
+        </MDBCard >
         <TimeAgo date="April 2, 2019" />
-      </Fragment>
+      </div>
     )
   }
 }

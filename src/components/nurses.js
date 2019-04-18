@@ -4,6 +4,7 @@ import ReactModal from 'react-modal';
 import { Link, Route } from 'react-router-dom'
 import App from '../App.css'
 import {CardDeck, Card, Button, ListGroup} from 'react-bootstrap'
+import { MDBBtn } from 'mdbreact';
 
 
 class Nurses extends Component {
@@ -83,9 +84,9 @@ class Nurses extends Component {
     return (
       <Fragment>
         <Link to="/admin/dashboard">
-          <button>
+          <MDBBtn>
            Home
-          </button>
+          </MDBBtn>
         </Link>
         <div>
         {this.state.nurseClicked === '' ? <input type='text' value={this.state.searchInput} onChange={this.handleSearchInput}></input> : ''}
